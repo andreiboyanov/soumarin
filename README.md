@@ -1,8 +1,8 @@
 # sousmarin
 
-A new Flutter project.
+All the information available on the Web about tennis players, clubs, matches and tournaments in
+Belgium (starting with Wallonia).
 
-## Getting Started
+This app doesn't store any information on any web server. It's only a reader for existing
+Web sites like www.aftnet.be, classement-tennis.be etc.
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
