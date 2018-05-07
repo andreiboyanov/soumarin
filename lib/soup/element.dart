@@ -7,7 +7,7 @@ class SoupElement {
   SoupElement(this.htmlElement);
 
   List<SoupElement> findAll(tag){
-    final result = List<SoupElement>();
+    final result = new List<SoupElement>();
     htmlElement.children.forEach((child) {
       final soupChild = new SoupElement(child);
       if (child.localName == tag) {
@@ -25,7 +25,6 @@ class SoupElement {
         return new SoupElement(child);
       }
     }
-    // FIXME: throw the right exception here
     throw new SoupNotFound("Element not found");
   }
 

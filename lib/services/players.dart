@@ -27,8 +27,8 @@ class PlayersRegister {
     _db.deletePlayer(player);
   }
 
-  void savePlayer(Player player) {
-    _db.savePlayer(player);
+  Future savePlayer(Player player) {
+    return _db.savePlayer(player);
   }
 
 }

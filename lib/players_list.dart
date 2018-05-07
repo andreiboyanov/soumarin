@@ -23,11 +23,13 @@ class _PlayersListState extends State<PlayersList> {
   int _playersCount = 1;
   String currentFilter = "";
 
-  void _onPlayerChanged(PlayerItemWidget playerTile) {
+  void _onPlayerChanged(PlayerItemWidget playerTile) async {
     if (playerTile.player.isFavorited) {
-      setState(() => playerService.savePlayer(playerTile.player));
+      await playerService.savePlayer(playerTile.player);
+      setState(() {});
     } else {
-      setState(() => playerService.deletePlayer(playerTile.player));
+      await playerService.deletePlayer(playerTile.player);
+      setState(() {});
     }
   }
 

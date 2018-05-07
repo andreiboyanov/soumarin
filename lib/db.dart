@@ -11,7 +11,7 @@ import 'types/player.dart';
 
 class SousMarinDb {
   static final SousMarinDb instance = new SousMarinDb._internal();
-  var _db;
+  Database _db;
 
   Future ensureOpened() async {
     if (_db == null) {
@@ -32,11 +32,10 @@ class SousMarinDb {
 
   Future savePlayer(Player player) async {
     Store playerStore = _db.getStore("players");
-    var playerMap = player.toMap();
-    var result = await _db.putRecord(
-        new Record(playerStore, playerMap, player.id)
-    );
-    return result.key;
+    final playerMap = player.toMap();
+    final record = new Record(playerStore, playerMap, player.id);
+    final Record result = await _db.putRecord(record);
+    return result;
   }
 
   Stream getPlayers() async* {
@@ -46,6 +45,8 @@ class SousMarinDb {
 
   Future deletePlayer(Player player) async {
     Store playerStore = _db.getStore("players");
+    final result = playerStore.delete(player.id);
+    return result;
   }
 
   SousMarinDb._internal();
@@ -53,7 +54,6 @@ class SousMarinDb {
   _openDatabase() async {
     final dataDir = await getApplicationDocumentsDirectory();
     String dbPath = join(dataDir.path, "sousmarin.db");
-//    String dbPath = join(dirname(Platform.script.toFilePath()), "sousmarin.db");
     DatabaseFactory dbFactory = ioDatabaseFactory;
     _db = await dbFactory.openDatabase(dbPath);
   }
