@@ -6,6 +6,7 @@ import 'package:validator/validator.dart';
 
 import 'types/player.dart';
 import 'services/players.dart';
+import './endless_list.dart';
 
 class PlayersList extends StatefulWidget {
   static _PlayersListState of(BuildContext context) =>
@@ -35,38 +36,10 @@ class _PlayersListState extends State<PlayersList> {
 
   @override
   Widget build(BuildContext context) {
-    final filterWidget = FilteredPlayersList.of(context);
-    if (currentFilter != filterWidget.filter) {
-      clear();
-    }
-    currentFilter = filterWidget.filter;
-    return new RefreshIndicator(
-        child:
-        new ListView.builder(
-          key: new Key("aft players list"),
-          primary: true,
-          itemCount: _playersCount,
-          itemBuilder: (BuildContext context, int index) =>
-              _buildPlayerItem(index, currentFilter),
-        ),
-        onRefresh: _onRefresh);
+    return new EndlessList(_buildPlayerItem);
   }
 
-  clear() {
-    _players.clear();
-    _playersCount = 1;
-  }
-
-  Future<Null> _onRefresh() {
-    setState(() {
-      clear();
-    });
-    final completer = new Completer<Null>();
-    completer.complete();
-    return completer.future;
-  }
-
-  _buildPlayerItem(int index, filter) {
+  _buildPlayerItem(BuildContext context, int index, filter) {
     if (index >= _players.length) {
       playerService.findPlayers(
           filter: {"name": filter}, start: _players.length)
@@ -148,18 +121,3 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
   }
 }
 
-class FilteredPlayersList extends InheritedWidget {
-  final String filter;
-
-  const FilteredPlayersList({Key key, this.filter, Widget child})
-      : super(key: key, child: child);
-
-  @override
-  bool updateShouldNotify(FilteredPlayersList old) {
-    return filter != old.filter;
-  }
-
-  static FilteredPlayersList of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(FilteredPlayersList);
-  }
-}

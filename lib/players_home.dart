@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'main_drawer.dart';
 import 'players_list.dart';
+import 'endless_list.dart';
 
 class PlayersHome extends StatefulWidget {
 
@@ -32,7 +33,7 @@ class _PlayersHomeState extends State<PlayersHome>
                 icon: new Icon(Icons.search),
                 hintText: "AFT Players",
             ))),
-        body: new FilteredPlayersList(
+        body: new FilteredEndlessList(
             filter: filter, child: new PlayersList())
     );
   }
