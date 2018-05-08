@@ -1,16 +1,15 @@
 import 'dart:async';
-import 'dart:convert' show Base64Decoder;
 
 import 'package:flutter/material.dart';
-import 'package:validator/validator.dart';
 
 
 class EndlessList extends StatefulWidget {
   static _EndlessListState of(BuildContext context) =>
       context.ancestorStateOfType(const TypeMatcher<_EndlessListState>());
   final buildItemCallback;
+  final getNewItemsCallback;
 
-  EndlessList(this.buildItemCallback);
+  EndlessList(this.buildItemCallback, this.getNewItemsCallback);
 
   @override
   createState() => new _EndlessListState();
@@ -35,7 +34,7 @@ class _EndlessListState extends State<EndlessList> {
           primary: true,
           itemCount: _itemsCount,
           itemBuilder: (BuildContext context, int index) =>
-              widget.buildItemCallback(context, index, _currentFilter),
+              _buildItem(context, index, _currentFilter),
         ),
         onRefresh: _onRefresh);
   }
@@ -43,6 +42,32 @@ class _EndlessListState extends State<EndlessList> {
   clear() {
     _items.clear();
     _itemsCount = 1;
+  }
+
+  _buildItem(BuildContext context, int index, filter) {
+    if (index >= _items.length) {
+      widget.getNewItemsCallback(filter: filter, start: _items.length)
+          .then((newItems) {
+        if (newItems.length > 0) {
+          setState(() {
+            _items.addAll(newItems);
+            _itemsCount = _items.length + 1;
+          });
+        } else {
+          setState(() {
+            _itemsCount = _items.length;
+          });
+        }
+      });
+      return const Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: const Center(
+          child: const CircularProgressIndicator(),
+        ),
+      );
+    } else {
+      return widget.buildItemCallback(context, _items[index]);
+    }
   }
 
   Future<Null> _onRefresh() {

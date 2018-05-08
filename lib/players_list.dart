@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert' show Base64Decoder;
 
 import 'package:flutter/material.dart';
@@ -9,69 +8,46 @@ import 'services/players.dart';
 import './endless_list.dart';
 
 class PlayersList extends StatefulWidget {
-  static _PlayersListState of(BuildContext context) =>
-      context.ancestorStateOfType(const TypeMatcher<_PlayersListState>());
 
   PlayersList();
 
   @override
   createState() => new _PlayersListState();
+
+  static _PlayersListState of(BuildContext context) =>
+      context.ancestorStateOfType(const TypeMatcher<_PlayersListState>());
 }
 
 class _PlayersListState extends State<PlayersList> {
   final playerService = new PlayersRegister();
-  List<Player> _players = new List<Player>();
-  int _playersCount = 1;
-  String currentFilter = "";
 
-  void _onPlayerChanged(PlayerItemWidget playerTile) async {
-    if (playerTile.player.isFavorited) {
-      await playerService.savePlayer(playerTile.player);
+  void onPlayerChanged(Player player) async {
+    if (player.isFavorited) {
+      await playerService.savePlayer(player);
       setState(() {});
     } else {
-      await playerService.deletePlayer(playerTile.player);
+      await playerService.deletePlayer(player);
       setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return new EndlessList(_buildPlayerItem);
+    return new EndlessList(_buildPlayerItem, _findPlayers);
   }
 
-  _buildPlayerItem(BuildContext context, int index, filter) {
-    if (index >= _players.length) {
+  _findPlayers({filter, start, count}) =>
       playerService.findPlayers(
-          filter: {"name": filter}, start: _players.length)
-          .then((newPlayers) {
-        if (newPlayers.length > 0) {
-          setState(() {
-            _players.addAll(newPlayers);
-            _playersCount = _players.length + 1;
-          });
-        } else {
-          setState(() {
-            _playersCount = _players.length;
-          });
-        }
-      });
-      return const Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: const Center(
-          child: const CircularProgressIndicator(),
-        ),
-      );
-    } else {
-      return new PlayerItemWidget(_players[index], _onPlayerChanged);
-    }
-  }
+          filter: {"name": filter}, start: start, max: count);
+
+  _buildPlayerItem(BuildContext context, Player player) =>
+      new PlayerItemWidget(player);
 }
 
 class PlayerItemWidget extends StatefulWidget {
   final Player player;
-  final ValueChanged<PlayerItemWidget> onChangeCallback;
 
-  PlayerItemWidget(this.player, this.onChangeCallback);
+  PlayerItemWidget(this.player);
 
   @override
   createState() {
@@ -95,7 +71,7 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
         onPressed: () =>
             setState(() {
               widget.player.toggleFavorited();
-              widget.onChangeCallback(widget);
+              PlayersList.of(context).onPlayerChanged(widget.player);
             }),
         icon: new Icon(
             widget.player.isFavorited ? Icons.favorite : Icons.favorite_border),
