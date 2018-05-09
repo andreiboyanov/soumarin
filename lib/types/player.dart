@@ -1,4 +1,3 @@
-
 class Player {
   String id;
   String firstName;
@@ -17,21 +16,22 @@ class Player {
     this.photoUrl
   });
 
-  Player.fromMap(Map<String, Object> values) {
-    this.id = values["id"];
-    this.firstName = values["firstName"];
-    this.lastName = values["lastName"];
-    this.singleRanking = values["singleRanking"];
-    this.doublePoints = values["doublePoints"];
-    this.clubId = values["clubId"];
-    this.clubName = values["clubName"];
-  }
+  factory Player.fromMap(Map<String, Object> values) =>
+      values != null ? new Player(
+          id: values["id"],
+          firstName: values["firstName"],
+          lastName: values["lastName"],
+          singleRanking: values["singleRanking"],
+          doublePoints: values["doublePoints"],
+          clubId: values["clubId"],
+          clubName: values["clubName"]
+      ) : null;
 
-  void toggleFavorited(){
+  void toggleFavorited() {
     isFavorited = !isFavorited;
   }
 
-  Map<String, Object> toMap(){
+  Map<String, Object> toMap() {
     return {
       "id": id,
       "firstName": firstName,

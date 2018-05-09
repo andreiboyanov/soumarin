@@ -4,9 +4,8 @@ import 'package:http/http.dart' as http;
 import "../types/player.dart";
 import "../soup/soup.dart";
 
-Future<List<Player>> aftSearchPlayers({start: 0, count: 10, name: "", region: 1,
-  male: true, female: true, clubId: ""}) async {
-  final result = new List<Player>();
+Stream<Player> aftSearchPlayers({start: 0, count: 10, name: "", region: 1,
+  male: true, female: true, clubId: ""}) async* {
   final url = start == 0
       ? "http://www.aftnet.be/MyAFT/Players/SearchPlayers"
       : "http://www.aftnet.be/MyAFT/Players/LoadMoreResults";
@@ -28,7 +27,7 @@ Future<List<Player>> aftSearchPlayers({start: 0, count: 10, name: "", region: 1,
   });
   final soup = new Soup(response.body);
   final players = soup.findAll("dl");
-  players.forEach((player) {
+  for (var player in players) {
     final fields = player.findAll("dd");
     if (fields.length > 3) {
       final idAndName = _parseIdAndName(fields[0].text);
@@ -48,10 +47,9 @@ Future<List<Player>> aftSearchPlayers({start: 0, count: 10, name: "", region: 1,
         clubName: fields[3].text,
         photoUrl: photo,
       );
-      result.add(newPlayer);
+      yield newPlayer;
     }
-  });
-  return result;
+  }
 }
 
 String _getClubIdFromHref(href) {

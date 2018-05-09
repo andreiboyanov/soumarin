@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:core';
-import 'dart:io';
 
 import 'package:sembast/sembast_io.dart';
 import 'package:sembast/sembast.dart';
@@ -41,6 +40,12 @@ class SousMarinDb {
   Stream getPlayers() async* {
     Store playerStore = _db.getStore("players");
     yield playerStore.records;
+  }
+
+  Future getPlayer(id) async {
+    Store playerStore = _db.getStore("players");
+    final dbPlayer = await playerStore.get(id);
+    return dbPlayer;
   }
 
   Future deletePlayer(Player player) async {

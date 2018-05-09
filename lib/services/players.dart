@@ -12,10 +12,16 @@ class PlayersRegister {
     if (filter != null) {
       _currentFilter = filter;
     }
-    List players = await aftSearchPlayers(
-      start: start, count: max,
-      name: _currentFilter.containsKey("name") ? filter["name"] : ""
-    );
+    final players = new List<Player>();
+    await for (Player player in aftSearchPlayers(
+        start: start, count: max,
+        name: _currentFilter.containsKey("name") ? filter["name"] : "")) {
+      final dbPlayer = await _db.getPlayer(player.id);
+      if (dbPlayer != null) {
+        player.isFavorited = dbPlayer['isFavorited'];
+      }
+      players.add(player);
+    }
     return players;
   }
 
