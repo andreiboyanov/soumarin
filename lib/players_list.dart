@@ -60,31 +60,49 @@ class PlayerItemWidget extends StatefulWidget {
 class _PlayerItemWidgetState extends State<PlayerItemWidget> {
   @override
   build(BuildContext context) {
-    return (new ListTile(
-      leading: _getImage(widget.player.photoUrl),
-      title: new Text(""
-          "${widget.player.firstName} "
-          "${widget.player.lastName}"),
-      subtitle: new Text(""
-          "${widget.player.id} / "
-          "${widget.player.singleRanking} / "
-          "${widget.player.clubName} (${widget.player.clubId})"),
-      trailing: new IconButton(
-        onPressed: () =>
-            setState(() {
-              widget.player.toggleFavorited();
-              PlayersList.of(context).onPlayerChanged(widget.player);
-            }),
-        icon: new Icon(
-            widget.player.isFavorited ? Icons.favorite : Icons.favorite_border),
-      ),
-    ));
+    return new Container(
+        margin: const EdgeInsets.only(top: 8.0),
+        child: ListTile(
+            leading:
+            new CircleAvatar(
+                backgroundImage: _getImage(widget.player.photoUrl)),
+            title: new Container(
+                child: new Text(""
+                    "${widget.player.firstName} "
+                    "${widget.player.lastName} ",
+                    style: new TextStyle(
+                      fontSize: 18.0,
+                      color: Colors.black,
+                    )),
+                padding: const EdgeInsets.only(bottom: 8.0)),
+            subtitle: new Container(
+                child: new Text(""
+                    "${widget.player.id} "
+                    "${widget.player.singleRanking} "
+                    "${widget.player.clubName} (${widget.player.clubId})")),
+            trailing: new IconButton(
+              onPressed: () =>
+                  setState(() {
+                    widget.player.toggleFavorited();
+                    PlayersList.of(context).onPlayerChanged(widget.player);
+                  }),
+              icon: new Icon(widget.player.isFavorited
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+                  size: 16.0),
+            )),
+        decoration: new BoxDecoration(
+            border: new Border(
+                bottom: new BorderSide(
+                    color: Colors.black12,
+                    width: 0.5)))
+    );
   }
 
-  Image _getImage(String url) {
-    Image image;
+  ImageProvider _getImage(String url) {
+    ImageProvider image;
     if (isURL(url)) {
-      image = new Image.network(url);
+      image = new NetworkImage(url);
     } else if (url.startsWith("data:")) {
       const encodingMark = ";base64,";
       final encodingStart = url.indexOf(encodingMark);
@@ -92,7 +110,7 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
         final data = url.substring(encodingStart + encodingMark.length);
         final decoder = new Base64Decoder();
         final imageData = decoder.convert(data);
-        image = new Image.memory(imageData);
+        image = new MemoryImage(imageData);
       }
     }
     return image;
