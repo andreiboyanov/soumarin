@@ -41,7 +41,7 @@ Stream<Player> aftSearchPlayers({start: 0, count: 10, name: "", region: 1,
         firstName: firstAndLastName.removeLast(),
         lastName: firstAndLastName.join(" "),
         singleRanking: fields[1].text,
-        doublePoints: fields[2].text,
+        doublePoints: fields[2].text.substring("Valeur double: ".length),
         clubId: _getClubIdFromHref(
             fields[3].findFirst("a").getAttribute("href")),
         clubName: fields[3].text,
