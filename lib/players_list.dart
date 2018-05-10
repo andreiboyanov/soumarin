@@ -63,7 +63,8 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
         margin: const EdgeInsets.only(top: 8.0),
         child: ListTile(
             leading: new CircleAvatar(
-                backgroundImage: getImageProvider(widget.player.photoUrl)),
+                backgroundImage: getImageProvider(widget.player.photoUrl)
+            ),
             title: new Container(
                 child: new Text(""
                     "${widget.player.firstName} "
@@ -71,13 +72,16 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
                     style: new TextStyle(
                       fontSize: 18.0,
                       color: Colors.black,
-                    )),
+                    )
+                ),
                 padding: const EdgeInsets.only(bottom: 8.0)),
             subtitle: new Container(
                 child: new Text(""
                     "${widget.player.id} "
                     "${widget.player.singleRanking} "
-                    "${widget.player.clubName} (${widget.player.clubId})")),
+                    "${widget.player.clubName} (${widget.player.clubId})"
+                )
+            ),
             trailing: new IconButton(
               onPressed: () =>
                   setState(() {
@@ -91,13 +95,16 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
             ),
             onTap: () =>
                 Navigator.push(context, new MaterialPageRoute(
-                    builder: (context) => new PlayerDetails(widget.player))),
+                    builder: (context) => new PlayerDetails(widget.player)
+                )),
         ),
         decoration: new BoxDecoration(
             border: new Border(
                 bottom: new BorderSide(
                     color: Colors.black12,
-                    width: 0.5)))
+                    width: 0.5)
+            )
+        )
     );
   }
 }

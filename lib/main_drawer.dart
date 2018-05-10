@@ -11,15 +11,11 @@ final mainDrawer = new Drawer(
 ));
 
 class DrawerEntry extends StatelessWidget {
-  String text;
-  String route;
-  TextStyle style;
+  final String text;
+  final String route;
+  final TextStyle style = new TextStyle(fontSize: 18.0);
 
-  DrawerEntry(String text, String route) {
-    this.text = text;
-    this.style = new TextStyle(fontSize: 18.0);
-    this.route = route;
-  }
+  DrawerEntry(this.text, this.route);
 
   @override
   build(BuildContext context) {

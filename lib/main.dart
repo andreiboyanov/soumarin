@@ -4,7 +4,12 @@ import 'players_home.dart';
 import 'wait_init.dart';
 import 'db.dart';
 
-void main() => runApp(new SousMarin());
+import 'package:flutter/rendering.dart';
+
+void main() {
+  debugPaintSizeEnabled = false;
+  runApp(new SousMarin());
+}
 
 class SousMarin extends StatefulWidget {
   @override
