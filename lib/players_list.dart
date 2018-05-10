@@ -1,12 +1,10 @@
-import 'dart:convert' show Base64Decoder;
-
 import 'package:flutter/material.dart';
-import 'package:validator/validator.dart';
 
 import 'types/player.dart';
 import 'services/players.dart';
 import 'endless_list.dart';
 import 'player_details.dart';
+import 'image_tools.dart';
 
 class PlayersList extends StatefulWidget {
 
@@ -65,7 +63,7 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
         margin: const EdgeInsets.only(top: 8.0),
         child: ListTile(
             leading: new CircleAvatar(
-                backgroundImage: _getImage(widget.player.photoUrl)),
+                backgroundImage: getImageProvider(widget.player.photoUrl)),
             title: new Container(
                 child: new Text(""
                     "${widget.player.firstName} "
@@ -101,23 +99,6 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
                     color: Colors.black12,
                     width: 0.5)))
     );
-  }
-
-  ImageProvider _getImage(String url) {
-    ImageProvider image;
-    if (isURL(url)) {
-      image = new NetworkImage(url);
-    } else if (url.startsWith("data:")) {
-      const encodingMark = ";base64,";
-      final encodingStart = url.indexOf(encodingMark);
-      if (encodingStart > 0) {
-        final data = url.substring(encodingStart + encodingMark.length);
-        final decoder = new Base64Decoder();
-        final imageData = decoder.convert(data);
-        image = new MemoryImage(imageData);
-      }
-    }
-    return image;
   }
 }
 
