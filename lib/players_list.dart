@@ -5,7 +5,8 @@ import 'package:validator/validator.dart';
 
 import 'types/player.dart';
 import 'services/players.dart';
-import './endless_list.dart';
+import 'endless_list.dart';
+import 'player_details.dart';
 
 class PlayersList extends StatefulWidget {
 
@@ -63,8 +64,7 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
     return new Container(
         margin: const EdgeInsets.only(top: 8.0),
         child: ListTile(
-            leading:
-            new CircleAvatar(
+            leading: new CircleAvatar(
                 backgroundImage: _getImage(widget.player.photoUrl)),
             title: new Container(
                 child: new Text(""
@@ -90,7 +90,11 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
                   ? Icons.favorite
                   : Icons.favorite_border,
                   size: 16.0),
-            )),
+            ),
+            onTap: () =>
+                Navigator.push(context, new MaterialPageRoute(
+                    builder: (context) => new PlayerDetails(widget.player))),
+        ),
         decoration: new BoxDecoration(
             border: new Border(
                 bottom: new BorderSide(

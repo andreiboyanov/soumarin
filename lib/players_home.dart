@@ -13,13 +13,11 @@ class PlayersHome extends StatefulWidget {
 
 class _PlayersHomeState extends State<PlayersHome>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
   String filter = "";
 
   @override
   initState() {
     super.initState();
-    _tabController = new TabController(length: 2, vsync: this);
   }
 
   @override
@@ -41,7 +39,6 @@ class _PlayersHomeState extends State<PlayersHome>
 
   @override dispose() {
     super.dispose();
-    _tabController.dispose();
   }
 
   _filterPlayers(newFilter) {
