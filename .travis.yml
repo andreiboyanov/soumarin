@@ -1,5 +1,8 @@
 os:
   - linux
+language: dart
+dart:
+  - stable
 sudo: false
 addons:
   apt:
@@ -15,4 +18,4 @@ script:
   - ./flutter/bin/flutter test
 cache:
   directories:
-- $HOME/.pub-cache
+    - $HOME/.pub-cache
