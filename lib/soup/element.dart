@@ -4,18 +4,27 @@ import "./exceptions.dart";
 
 class SoupElement {
   Element htmlElement;
+
   SoupElement(this.htmlElement);
 
-  List<SoupElement> findAll(tag){
+  List<SoupElement> findAll(String tag, {String attributeClass, int limit}) {
     final result = new List<SoupElement>();
-    htmlElement.children.forEach((child) {
+    for (final child in htmlElement.children) {
+      if (limit != null && result.length >= limit) {
+        break;
+      }
       final soupChild = new SoupElement(child);
-      if (child.localName == tag) {
+      if ((tag == null || child.localName == tag) &&
+          this.attributeValueContains(child, 'class', attributeClass)) {
         result.add(soupChild);
       } else {
-        result.addAll(soupChild.findAll(tag));
+        result.addAll(soupChild.findAll(
+          tag,
+          attributeClass: attributeClass,
+          limit: limit == null ? null : limit - result.length,
+        ));
       }
-    });
+    }
     return result;
   }
 
@@ -28,9 +37,39 @@ class SoupElement {
     throw new SoupNotFound("Element not found");
   }
 
+  SoupElement find({id}) {
+    for (final child in htmlElement.children) {
+      var soupChild = new SoupElement(child);
+      if (child.id == id) {
+        return soupChild;
+      } else {
+        soupChild = soupChild.find(id: id);
+        if (soupChild != null) {
+          return soupChild;
+        }
+      }
+    }
+    return null;
+  }
+
   String getAttribute(attribute) {
     return htmlElement.attributes[attribute];
   }
 
   String get text => htmlElement.text;
+  String get tag => htmlElement.localName;
+
+  bool attributeValueContains(
+      Element html, String attributeName, String attributeValue) {
+    if (attributeValue == null) {
+      return true;
+    }
+    if (!html.attributes.containsKey(attributeName)) {
+      return false;
+    }
+    if (html.attributes[attributeName].contains(attributeValue)) {
+      return  true;
+    }
+    return false;
+  }
 }

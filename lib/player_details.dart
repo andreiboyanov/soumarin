@@ -4,9 +4,11 @@ import 'main_drawer.dart';
 import 'types/player.dart';
 import 'image_tools.dart';
 
+import 'services/players.dart';
 
 class PlayerDetails extends StatefulWidget {
   final Player player;
+  final playersRegister = new PlayersRegister();
 
   PlayerDetails(this.player);
 
@@ -14,105 +16,118 @@ class PlayerDetails extends StatefulWidget {
   createState() => new _PlayerDetailsState();
 }
 
-
 class _PlayerDetailsState extends State<PlayerDetails> {
   @override
   initState() {
     super.initState();
+    widget.playersRegister.getPlayerDetails(widget.player).then((updatePlayer) {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        drawer: mainDrawer,
-        appBar: new AppBar(
-            title: new Text(
-                "${widget.player.firstName} ${widget.player.lastName}")),
-        body: new ListView(
-            children: <Widget>[
-              new Image(
-                image: getImageProvider(widget.player.photoUrl),
-                fit: BoxFit.cover,
-                gaplessPlayback: true,
-              ),
-              new Container(
-                padding: EdgeInsets.all(32.0),
-                child: new Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    new Expanded(
-                      child: new Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
+      drawer: mainDrawer,
+      appBar: new AppBar(
+        title: new Text("${widget.player.firstName} ${widget.player.lastName}"),
+        actions: <Widget>[
+          new IconButton(
+            onPressed: () => setState(() {
+                  widget.player.toggleFavorited();
+                }),
+            icon: new Icon(
+              widget.player.isFavorited
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+            ),
+          ),
+        ],
+      ),
+      body: new ListView(
+        children: <Widget>[
+          new Image(
+            image: getImageProvider(widget.player.photoUrl),
+            fit: BoxFit.cover,
+            gaplessPlayback: true,
+          ),
+          new Container(
+            padding: EdgeInsets.all(32.0),
+            child: new Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                new Expanded(
+                  child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        new Text(
+                          "${widget.player.id}",
+                          style: _idStyle,
+                        ),
+                        new Container(
+                          padding: const EdgeInsets.only(bottom: 2.0),
+                          child: new Row(
+                            children: <Widget>[
+                              new Text(
+                                'Since:',
+                                style: _labelStyle,
+                              ),
+                              new Text(
+                                widget.player.affiliateFrom,
+                                style: _labelStyle,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                ),
+                new Container(
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      new Container(
+                        padding: const EdgeInsets.only(bottom: 2.0),
+                        child: new Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             new Text(
-                              "${widget.player.id}",
-                              style: _idStyle,
+                              'Single ranking:',
+                              style: _labelStyle,
                             ),
-                            new Container(
-                                padding: const EdgeInsets.only(bottom: 2.0),
-                                child: new Row(
-                                    children: <Widget>[
-                                      new Text(
-                                        'Affiliated since:',
-                                        style: _labelStyle,
-                                      ),
-                                      new Text(
-                                        '20/08/2010',
-                                        style: _labelStyle,
-                                      ),
-                                    ]
-                                )
+                            new Text(
+                              '${widget.player.singleRanking}',
+                              style: _valueStyle,
                             ),
-                          ]
+                          ],
+                        ),
                       ),
-                    ),
-                    new Container(
-                        child: new Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: <Widget>[
-                              new Container(
-                                padding: const EdgeInsets.only(bottom: 2.0),
-                                child: new Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
-                                    new Text(
-                                      'Single ranking:',
-                                      style: _labelStyle,
-                                    ),
-                                    new Text(
-                                      '${widget.player.singleRanking}',
-                                      style: _valueStyle,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              new Container(
-                                padding: const EdgeInsets.only(bottom: 2.0),
-                                child: new Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Double points:',
-                                        style: _labelStyle,
-                                      ),
-                                      new Text(
-                                        '${widget.player.doublePoints}',
-                                        textAlign: TextAlign.right,
-                                        style: _valueStyle,
-                                      ),
-                                    ]
-                                ),
-                              ),
-                            ]
-                        )
-                    )
-                  ],
-                ),
-              )
-            ]
-        )
+                      new Container(
+                        padding: const EdgeInsets.only(bottom: 2.0),
+                        child: new Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            new Text(
+                              'Double points:',
+                              style: _labelStyle,
+                            ),
+                            new Text(
+                              '${widget.player.doublePoints}',
+                              textAlign: TextAlign.right,
+                              style: _valueStyle,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -128,4 +143,3 @@ class _PlayerDetailsState extends State<PlayerDetails> {
     fontStyle: FontStyle.italic,
   );
 }
-

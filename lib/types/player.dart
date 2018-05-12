@@ -1,19 +1,20 @@
 class Player {
-  String id;
-  String firstName;
-  String lastName;
-  String singleRanking;
-  String doublePoints;
-  String clubId;
-  String clubName;
-  String photoUrl;
+  String id = "";
+  String firstName = "";
+  String lastName = "";
+  String singleRanking = "";
+  String doublePoints = "";
+  String clubId = "";
+  String clubName = "";
+  String photoUrl = "";
+  String affiliateFrom = "";
   bool isFavorited = false;
 
   Player({
-    this.id, this.firstName, this.lastName,
-    this.singleRanking, this.doublePoints,
-    this.clubId, this.clubName,
-    this.photoUrl
+    this.id = "", this.firstName = "", this.lastName = "",
+    this.singleRanking = "", this.doublePoints = "",
+    this.clubId = "", this.clubName = "",
+    this.photoUrl = "", this.affiliateFrom = ""
   });
 
   factory Player.fromMap(Map<String, Object> values) =>
@@ -40,6 +41,8 @@ class Player {
       "doublePoints": doublePoints,
       "clubId": clubId,
       "clubName": clubName,
+      "photoUrl": photoUrl,
+      "affiliateFrom": affiliateFrom,
       "isFavorited": isFavorited,
     };
   }

@@ -4,8 +4,50 @@ import 'package:http/http.dart' as http;
 import "../types/player.dart";
 import "../soup/soup.dart";
 
-Stream<Player> aftSearchPlayers({start: 0, count: 10, name: "", region: 1,
-  male: true, female: true, clubId: ""}) async* {
+const PLAYER_INFO_LABELS = {
+     "Né le:": "birth date",
+     "Nationalité:": "nationality",
+//     "Sexe:": "sex",
+     "Classement simple:": "single ranking",
+     "Valeur double:": "double points",
+     "Première affiliation:": "first affiliation",
+     "Actif depuis le:": "active from",
+     "Club:": "club",
+};
+
+
+Future<Player> aftGetPlayerDetails(Player player) async {
+  final url = "http://www.aftnet.be/MyAFT/Players/Detail/${player.id}";
+  final response = await http.get(url);
+  final soup = new Soup(response.body).body;
+  final detailBody =
+      soup.findAll("div", attributeClass: "detail-body player", limit: 1)[0];
+  final info = detailBody.find(id: 'colInfo').findFirst('dl');
+  String currentLabel;
+  final playerData = new Map<String, String>();
+  for (var infoElement in info.findAll(null)) {
+    if (infoElement.tag == "dt") {
+      currentLabel = infoElement.text;
+    } else if (infoElement.tag == "dd") {
+      if (PLAYER_INFO_LABELS.containsKey(currentLabel)) {
+        playerData[PLAYER_INFO_LABELS[currentLabel]] = infoElement.text;
+      }
+    }
+  }
+  if (playerData.containsKey("first affiliation")) {
+    player.affiliateFrom = playerData["first affiliation"];
+  }
+  return player;
+}
+
+Stream<Player> aftSearchPlayers(
+    {start: 0,
+    count: 10,
+    name: "",
+    region: 1,
+    male: true,
+    female: true,
+    clubId: ""}) async* {
   final url = start == 0
       ? "http://www.aftnet.be/MyAFT/Players/SearchPlayers"
       : "http://www.aftnet.be/MyAFT/Players/LoadMoreResults";
@@ -25,7 +67,7 @@ Stream<Player> aftSearchPlayers({start: 0, count: 10, name: "", region: 1,
     "Female": female.toString(),
     "ClubId": clubId
   });
-  final soup = new Soup(response.body);
+  final soup = new Soup(response.body).body;
   final players = soup.findAll("dl");
   for (var player in players) {
     final fields = player.findAll("dd");
@@ -42,8 +84,8 @@ Stream<Player> aftSearchPlayers({start: 0, count: 10, name: "", region: 1,
         lastName: firstAndLastName.join(" "),
         singleRanking: fields[1].text,
         doublePoints: fields[2].text.substring("Valeur double: ".length),
-        clubId: _getClubIdFromHref(
-            fields[3].findFirst("a").getAttribute("href")),
+        clubId:
+            _getClubIdFromHref(fields[3].findFirst("a").getAttribute("href")),
         clubName: fields[3].text,
         photoUrl: photo,
       );
@@ -65,4 +107,3 @@ List<String> _parseIdAndName(idAndName) {
   final id = idAndName.substring(firstBracketIndex + 1, idAndName.length - 1);
   return [id, name];
 }
-

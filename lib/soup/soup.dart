@@ -4,15 +4,11 @@ import "package:html/dom.dart";
 import './element.dart';
 
 class Soup {
-  String html;
-  Document dom;
+  final String html;
+  SoupElement body;
 
   Soup(this.html) {
-    dom = parse(html);
+    final dom = parse(html);
+    body = new SoupElement(dom.body);
   }
-
-  List<SoupElement> findAll(tag) {
-    return new SoupElement(dom.body).findAll(tag);
-  }
-
 }

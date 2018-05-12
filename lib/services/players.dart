@@ -29,6 +29,10 @@ class PlayersRegister {
     return new List<Player>();
   }
 
+  Future getPlayerDetails(Player player, [forceUpdate = false]) {
+    return aftGetPlayerDetails(player);
+  }
+
   Future deletePlayer(Player player) async {
     _db.deletePlayer(player);
   }
@@ -36,5 +40,7 @@ class PlayersRegister {
   Future savePlayer(Player player) {
     return _db.savePlayer(player);
   }
+
+
 
 }
