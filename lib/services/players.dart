@@ -2,7 +2,7 @@ import "dart:async";
 
 import "../types/player.dart";
 import "../db.dart";
-import "./aft.dart";
+import "aft.dart";
 
 class PlayersRegister {
   final _db = SousMarinDb.instance;

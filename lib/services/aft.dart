@@ -2,19 +2,39 @@ import "dart:async";
 import 'package:http/http.dart' as http;
 
 import "../types/player.dart";
+import "../types/match.dart";
 import "../soup/soup.dart";
+import "../soup/element.dart";
 
 const PLAYER_INFO_LABELS = {
-     "Né le:": "birth date",
-     "Nationalité:": "nationality",
+  "Né le:": "birth date",
+  "Nationalité:": "nationality",
 //     "Sexe:": "sex",
-     "Classement simple:": "single ranking",
-     "Valeur double:": "double points",
-     "Première affiliation:": "first affiliation",
-     "Actif depuis le:": "active from",
-     "Club:": "club",
+  "Classement simple:": "single ranking",
+  "Valeur double:": "double points",
+  "Première affiliation:": "first affiliation",
+  "Actif depuis le:": "active from",
+  "Club:": "club",
 };
 
+Stream<SingleMatch> aftGetSingleMatches(String playerId) async* {
+  final url =
+      "http://www.aftnet.be/MyAFT/Players/TournamentSingle?numFed=1098501";
+  final response = await http.get(url);
+  final soup = new Soup(response.body).body;
+  print(soup);
+  yield new SingleMatch(playerId, playerId, new DateTime.now());
+}
+
+Stream<DoubleMatch> aftGetDoubleMatches(String playerId) async* {
+  final url =
+      "http://www.aftnet.be/MyAFT/Players/TournamentDouble?numFed=1098501";
+  final response = await http.get(url);
+  final soup = new Soup(response.body).body;
+  print(soup);
+  yield new DoubleMatch(
+      playerId, playerId, playerId, playerId, new DateTime.now());
+}
 
 Future<Player> aftGetPlayerDetails(Player player) async {
   final url = "http://www.aftnet.be/MyAFT/Players/Detail/${player.id}";
@@ -37,7 +57,46 @@ Future<Player> aftGetPlayerDetails(Player player) async {
   if (playerData.containsKey("first affiliation")) {
     player.affiliateFrom = playerData["first affiliation"];
   }
+  final singleMatches =
+      soup.find(id: "divPlayerDetailTournamentSingleResultData").findAll("dl");
+  final currentYear = new DateTime.now().year;
+  player.singleMatches[currentYear] = [];
+  for (final matchElement in singleMatches) {
+    final infoElements = matchElement.findAll("dd");
+    player.singleMatches[currentYear]
+        .add(_parseSingleMatch(player.id, infoElements));
+  }
   return player;
+}
+
+SingleMatch _parseSingleMatch(
+    String firstPlayerId, List<SoupElement> infoElements) {
+  final tournamentAndDate = infoElements[0].text.trim();
+  final delimiter = tournamentAndDate.length - 10 - 1;
+  final tournament = tournamentAndDate.substring(0, delimiter);
+  final dateComponents = tournamentAndDate.substring(delimiter).split('/');
+  final date = new DateTime(int.parse(dateComponents[2]),
+      int.parse(dateComponents[1]), int.parse(dateComponents[0]));
+  final category = infoElements[1].text.trim();
+  final opponentNameAndRanking = infoElements[2].text.trim();
+  final opponent = opponentNameAndRanking.substring(
+      opponentNameAndRanking.indexOf("\n") + 1,
+      opponentNameAndRanking.lastIndexOf(" "));
+  final scoreText = infoElements[3].text.trim();
+  final scoreBySets = scoreText.split("-");
+  final score = scoreBySets.map((String setScore) {
+    final scoreByGames = setScore.split("/");
+    final gamesAsIntegers =
+        scoreByGames.map((String games) => int.parse(games)).toList();
+    return gamesAsIntegers;
+  }).toList();
+  return new SingleMatch(
+    firstPlayerId,
+    opponent,
+    date,
+    clubId: tournament,
+    score: score,
+  );
 }
 
 Stream<Player> aftSearchPlayers(

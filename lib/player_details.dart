@@ -2,13 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'main_drawer.dart';
 import 'types/player.dart';
+import 'types/match.dart';
+
 import 'image_tools.dart';
 
 import 'services/players.dart';
+import 'services/matches.dart';
+import 'widgets/matches.dart';
 
 class PlayerDetails extends StatefulWidget {
   final Player player;
   final playersRegister = new PlayersRegister();
+  final matchesRegister = new MatchesRegister();
+  final singleMatches = new ExpansionPanelMatchList();
 
   PlayerDetails(this.player);
 
@@ -21,12 +27,109 @@ class _PlayerDetailsState extends State<PlayerDetails> {
   initState() {
     super.initState();
     widget.playersRegister.getPlayerDetails(widget.player).then((updatePlayer) {
-      setState(() {});
+      setState(() {
+        widget.singleMatches.matches =
+            widget.player.singleMatches[new DateTime.now().year];
+      });
+    });
+    widget.matchesRegister
+        .findMatches(widget.player.id, new DateTime.now().year)
+        .then((List<TennisMatch> matches) {
+      setState(() {
+        widget.singleMatches.matches = matches;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final mainInfoPanel = new Container(
+      padding: EdgeInsets.all(32.0),
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          new Expanded(
+            child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  new Text(
+                    "${widget.player.id}",
+                    style: _idStyle,
+                  ),
+                  new Container(
+                    padding: const EdgeInsets.only(bottom: 2.0),
+                    child: new Row(
+                      children: <Widget>[
+                        new Text(
+                          'Since:',
+                          style: _labelStyle,
+                        ),
+                        new Text(
+                          widget.player.affiliateFrom,
+                          style: _labelStyle,
+                        ),
+                      ],
+                    ),
+                  ),
+                ]),
+          ),
+          new Container(
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                new Container(
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  child: new Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      new Text(
+                        'Single ranking:',
+                        style: _labelStyle,
+                      ),
+                      new Text(
+                        '${widget.player.singleRanking}',
+                        style: _valueStyle,
+                      ),
+                    ],
+                  ),
+                ),
+                new Container(
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  child: new Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      new Text(
+                        'Double points:',
+                        style: _labelStyle,
+                      ),
+                      new Text(
+                        '${widget.player.doublePoints}',
+                        textAlign: TextAlign.right,
+                        style: _valueStyle,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+
+    final matchesExpansionPanelList = new ExpansionPanelList(
+      expansionCallback: (int index, bool isExpanded) {
+        setState(() {
+          widget.singleMatches.isExpanded = !isExpanded;
+        });
+      },
+      children: <ExpansionPanel>[
+        widget.singleMatches.build(),
+      ],
+    );
+
     return new Scaffold(
       drawer: mainDrawer,
       appBar: new AppBar(
@@ -51,81 +154,8 @@ class _PlayerDetailsState extends State<PlayerDetails> {
             fit: BoxFit.cover,
             gaplessPlayback: true,
           ),
-          new Container(
-            padding: EdgeInsets.all(32.0),
-            child: new Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                new Expanded(
-                  child: new Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        new Text(
-                          "${widget.player.id}",
-                          style: _idStyle,
-                        ),
-                        new Container(
-                          padding: const EdgeInsets.only(bottom: 2.0),
-                          child: new Row(
-                            children: <Widget>[
-                              new Text(
-                                'Since:',
-                                style: _labelStyle,
-                              ),
-                              new Text(
-                                widget.player.affiliateFrom,
-                                style: _labelStyle,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]),
-                ),
-                new Container(
-                  child: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      new Container(
-                        padding: const EdgeInsets.only(bottom: 2.0),
-                        child: new Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            new Text(
-                              'Single ranking:',
-                              style: _labelStyle,
-                            ),
-                            new Text(
-                              '${widget.player.singleRanking}',
-                              style: _valueStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                      new Container(
-                        padding: const EdgeInsets.only(bottom: 2.0),
-                        child: new Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            new Text(
-                              'Double points:',
-                              style: _labelStyle,
-                            ),
-                            new Text(
-                              '${widget.player.doublePoints}',
-                              textAlign: TextAlign.right,
-                              style: _valueStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          )
+          mainInfoPanel,
+          matchesExpansionPanelList,
         ],
       ),
     );

@@ -1,3 +1,5 @@
+import 'match.dart';
+
 class Player {
   String id = "";
   String firstName = "";
@@ -9,6 +11,8 @@ class Player {
   String photoUrl = "";
   String affiliateFrom = "";
   bool isFavorited = false;
+  final singleMatches = Map<int, List<SingleMatch>>();
+  final doubleMatches = Map<int, List<DoubleMatch>>();
 
   Player({
     this.id = "", this.firstName = "", this.lastName = "",
