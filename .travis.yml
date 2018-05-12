@@ -1,6 +1,6 @@
 os:
   - linux
-language: dart
+language: android
 dart:
   - stable
 sudo: false
