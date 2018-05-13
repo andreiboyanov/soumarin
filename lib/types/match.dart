@@ -1,41 +1,34 @@
+import "player.dart";
+
 enum TennisMatchType { single, double }
 enum TennisMatchWinner { first, second }
 
 class TennisMatch {
+  final Player player1;
+  final Player player11;
+  final Player player2;
+  final Player player21;
+
   final DateTime date;
-  final String clubId;
+  final String tournamentId;
+  final String tournamentName;
+
   final List<List<int>> score;
   final String result;
   final TennisMatchWinner winner;
+  final TennisMatchType type;
 
-  TennisMatch(this.date,
-      {this.clubId = "", this.score, this.result, this.winner});
-}
-
-class SingleMatch extends TennisMatch {
-  final String player1Id;
-  final String player2Id;
-
-  SingleMatch(this.player1Id, this.player2Id, DateTime date,
-      {clubId = "",
-      List<List<int>> score,
-      String result,
-      TennisMatchWinner winner})
-      : super(date,
-            clubId: clubId, score: score, result: result, winner: winner);
-}
-
-class DoubleMatch extends TennisMatch {
-  final String team1Player1Id;
-  final String team1Player2Id;
-  final String team2Player1Id;
-  final String team2Player2Id;
-
-  DoubleMatch(this.team1Player1Id, this.team1Player2Id, this.team2Player1Id,
-      this.team2Player2Id, DateTime date,
-      {clubId = "",
-      List<List<int>> score,
-      String result,
-      TennisMatchWinner winner})
-      : super(date, clubId: clubId, score: score, result: result);
+  TennisMatch(
+    this.date,
+    this.player1,
+    this.player2, {
+    this.player11,
+    this.player21,
+    this.tournamentId = "",
+    this.tournamentName = "",
+    this.score,
+    this.result,
+    this.winner,
+    this.type = TennisMatchType.single,
+  });
 }

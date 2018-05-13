@@ -32,13 +32,6 @@ class _PlayerDetailsState extends State<PlayerDetails> {
         widget.singleMatches.matches = widget.player.singleMatches[thisYear];
       });
     });
-    widget.matchesRegister
-        .findMatches(widget.player.id, thisYear)
-        .then((List<TennisMatch> matches) {
-      setState(() {
-        widget.singleMatches.matches = matches;
-      });
-    });
   }
 
   @override
@@ -159,7 +152,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
           mainInfoPanel,
           matchesExpansionPanelList,
           new Container(
-            padding: EdgeInsets.only(top: 24.0),
+            padding: EdgeInsets.all(24.0),
             child: new Center(
               child: new Text(
                   "That's everything we know about ${widget.player.firstName}"),

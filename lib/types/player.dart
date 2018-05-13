@@ -11,26 +11,30 @@ class Player {
   String photoUrl = "";
   String affiliateFrom = "";
   bool isFavorited = false;
-  final singleMatches = Map<int, List<SingleMatch>>();
-  final doubleMatches = Map<int, List<DoubleMatch>>();
+  final singleMatches = Map<int, List<TennisMatch>>();
+  final doubleMatches = Map<int, List<TennisMatch>>();
 
-  Player({
-    this.id = "", this.firstName = "", this.lastName = "",
-    this.singleRanking = "", this.doublePoints = "",
-    this.clubId = "", this.clubName = "",
-    this.photoUrl = "", this.affiliateFrom = ""
-  });
+  Player(
+      {this.id = "",
+      this.firstName = "",
+      this.lastName = "",
+      this.singleRanking = "",
+      this.doublePoints = "",
+      this.clubId = "",
+      this.clubName = "",
+      this.photoUrl = "",
+      this.affiliateFrom = ""});
 
-  factory Player.fromMap(Map<String, Object> values) =>
-      values != null ? new Player(
+  factory Player.fromMap(Map<String, Object> values) => values != null
+      ? new Player(
           id: values["id"],
           firstName: values["firstName"],
           lastName: values["lastName"],
           singleRanking: values["singleRanking"],
           doublePoints: values["doublePoints"],
           clubId: values["clubId"],
-          clubName: values["clubName"]
-      ) : null;
+          clubName: values["clubName"])
+      : null;
 
   void toggleFavorited() {
     isFavorited = !isFavorited;
@@ -49,5 +53,16 @@ class Player {
       "affiliateFrom": affiliateFrom,
       "isFavorited": isFavorited,
     };
+  }
+
+  // Parse a single string name in the form "Boyanov de Radomir Andrei"
+  // and return a list with [firstName, lastName] like this example:
+  // ["Andrei", "Boyanov de Radomir"]
+  static List<String> parseName(String name) {
+    final nameComponents = name.split(" ");
+    return [
+      nameComponents.removeLast(),
+      nameComponents.join(" "),
+    ];
   }
 }

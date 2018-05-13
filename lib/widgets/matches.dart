@@ -37,33 +37,29 @@ class ExpansionPanelMatchList {
   Widget get body => matches == null
       ? new Center(child: new CircularProgressIndicator())
       : new Container(
-          height: 100.0,
-          child: new ListView(
+          child: new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: matches.map((TennisMatch match) {
               Widget result;
-              if (match is SingleMatch) {
-                final singleMatch = match as SingleMatch;
+              if (match.type == TennisMatchType.single) {
                 result = new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    new Text(""
-                        "vs ${singleMatch.player2Id}",
+                    new Text(
+                      "vs ${match.player2.firstName} ${match.player2.lastName}",
                       style: new TextStyle(
                         fontSize: 18.0,
                       ),
                     ),
-                    new Text("${singleMatch.result}"),
+                    new Text("${match.result}"),
                   ],
                 );
               } else {
-                final doubleMatch = match as DoubleMatch;
                 result = new Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    new Text(""
-                        "${doubleMatch.team1Player1Id} "
-                        "vs ${doubleMatch.team2Player1Id}"),
-                    new Text("${doubleMatch.result}"),
+                    new Text("Double matches not supported yet."),
+                    new Text("Sorry for the discrimination"),
                   ],
                 );
               }

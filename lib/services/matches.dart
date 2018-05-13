@@ -17,12 +17,6 @@ class MatchesRegister {
     String tournamentId,
   }) async {
     final matches = new List<TennisMatch>();
-    final matchFinder = type == TennisMatchType.single
-        ? aftGetSingleMatches
-        : aftGetDoubleMatches;
-    await for (TennisMatch match in matchFinder(playerId)) {
-      matches.add(match);
-    }
     return matches;
   }
 }
