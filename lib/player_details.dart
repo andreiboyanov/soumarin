@@ -26,14 +26,14 @@ class _PlayerDetailsState extends State<PlayerDetails> {
   @override
   initState() {
     super.initState();
+    final thisYear = new DateTime.now().year;
     widget.playersRegister.getPlayerDetails(widget.player).then((updatePlayer) {
       setState(() {
-        widget.singleMatches.matches =
-            widget.player.singleMatches[new DateTime.now().year];
+        widget.singleMatches.matches = widget.player.singleMatches[thisYear];
       });
     });
     widget.matchesRegister
-        .findMatches(widget.player.id, new DateTime.now().year)
+        .findMatches(widget.player.id, thisYear)
         .then((List<TennisMatch> matches) {
       setState(() {
         widget.singleMatches.matches = matches;
@@ -119,15 +119,17 @@ class _PlayerDetailsState extends State<PlayerDetails> {
       ),
     );
 
-    final matchesExpansionPanelList = new ExpansionPanelList(
-      expansionCallback: (int index, bool isExpanded) {
-        setState(() {
-          widget.singleMatches.isExpanded = !isExpanded;
-        });
-      },
-      children: <ExpansionPanel>[
-        widget.singleMatches.build(),
-      ],
+    final matchesExpansionPanelList = new Container(
+      child: new ExpansionPanelList(
+        expansionCallback: (int index, bool isExpanded) {
+          setState(() {
+            widget.singleMatches.isExpanded = !isExpanded;
+          });
+        },
+        children: <ExpansionPanel>[
+          widget.singleMatches.build(),
+        ],
+      ),
     );
 
     return new Scaffold(
@@ -156,6 +158,13 @@ class _PlayerDetailsState extends State<PlayerDetails> {
           ),
           mainInfoPanel,
           matchesExpansionPanelList,
+          new Container(
+            padding: EdgeInsets.only(top: 24.0),
+            child: new Center(
+              child: new Text(
+                  "That's everything we know about ${widget.player.firstName}"),
+            ),
+          ),
         ],
       ),
     );

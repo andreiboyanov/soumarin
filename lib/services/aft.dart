@@ -72,11 +72,18 @@ Future<Player> aftGetPlayerDetails(Player player) async {
 SingleMatch _parseSingleMatch(
     String firstPlayerId, List<SoupElement> infoElements) {
   final tournamentAndDate = infoElements[0].text.trim();
-  final delimiter = tournamentAndDate.length - 10 - 1;
-  final tournament = tournamentAndDate.substring(0, delimiter);
-  final dateComponents = tournamentAndDate.substring(delimiter).split('/');
-  final date = new DateTime(int.parse(dateComponents[2]),
-      int.parse(dateComponents[1]), int.parse(dateComponents[0]));
+  final delimiter = tournamentAndDate.indexOf("/") - 2;
+  String tournament;
+  DateTime date;
+  if (delimiter > 0) {
+    tournament = tournamentAndDate.substring(0, delimiter);
+    final dateComponents = tournamentAndDate.substring(delimiter).split('/');
+    date = new DateTime(int.parse(dateComponents[2]),
+        int.parse(dateComponents[1]), int.parse(dateComponents[0]));
+  } else {
+    tournament = tournamentAndDate;
+    date = null;
+  }
   final category = infoElements[1].text.trim();
   final opponentNameAndRanking = infoElements[2].text.trim();
   final opponent = opponentNameAndRanking.substring(
@@ -84,18 +91,24 @@ SingleMatch _parseSingleMatch(
       opponentNameAndRanking.lastIndexOf(" "));
   final scoreText = infoElements[3].text.trim();
   final scoreBySets = scoreText.split("-");
-  final score = scoreBySets.map((String setScore) {
-    final scoreByGames = setScore.split("/");
-    final gamesAsIntegers =
-        scoreByGames.map((String games) => int.parse(games)).toList();
-    return gamesAsIntegers;
-  }).toList();
+  List<List<int>> score;
+  try {
+    score = scoreBySets.map((String setScore) {
+      final scoreByGames = setScore.split("/");
+      final gamesAsIntegers =
+      scoreByGames.map((String games) => int.parse(games)).toList();
+      return gamesAsIntegers;
+    }).toList();
+  } on FormatException {
+    score = null;
+  }
   return new SingleMatch(
     firstPlayerId,
     opponent,
     date,
     clubId: tournament,
     score: score,
+    result: scoreText,
   );
 }
 
