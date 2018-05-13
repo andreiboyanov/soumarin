@@ -54,7 +54,7 @@ Map<String, dynamic> _parseSingleMatch(List<SoupElement> infoElements) {
   // Get the tournament name and date form a string in the
   // form "FORÊT DE SOIGNES 28/12/2017"
   // In some cases the string may contain only the tournament name:
-  // "FORÊT DE SOIGNES" (e.g. if the match was not player)
+  // "FORÊT DE SOIGNES" (e.g. if the match was not played)
   final tournamentAndDate = infoElements[0].text.trim();
   final delimiter = tournamentAndDate.indexOf("/") - 2;
   if (delimiter > 0) {
@@ -79,13 +79,18 @@ Map<String, dynamic> _parseSingleMatch(List<SoupElement> infoElements) {
   final opponentNameAndRanking = infoElements[2].text.trim();
   final nameStartIndex = opponentNameAndRanking.indexOf("\n") + 1;
   final nameEndIndex = opponentNameAndRanking.lastIndexOf(" ");
-
   matchData["opponent name"] =
       opponentNameAndRanking.substring(nameStartIndex, nameEndIndex);
   matchData["opponent ranking"] = opponentNameAndRanking.substring(
       nameEndIndex + 2, opponentNameAndRanking.length - 1);
+  final opponentDetailsUrl =
+      infoElements[2].findFirst("a").getAttribute("data-url");
   matchData["opponent id"] =
-      infoElements[2].findFirst("a").getAttribute("href");
+      opponentDetailsUrl.substring(opponentDetailsUrl.lastIndexOf("/") + 1);
+
+  // Score can be like "6/2-6/0" but also "WO Exc." for example if the match
+  // was not played. In the latter case I just set 'score' to null.
+  // In any case the string version is stored in the field 'result'
   final scoreText = infoElements[3].text.trim();
   final scoreBySets = scoreText.split("-");
   try {
@@ -99,6 +104,13 @@ Map<String, dynamic> _parseSingleMatch(List<SoupElement> infoElements) {
     matchData["score"] = null;
   }
   matchData["result"] = scoreText;
+
+  // I get won/lost information from the image url. The icon shows the
+  // situation from the point of view of the main player of course.
+  matchData["won"] = infoElements[3]
+      .findFirst("img")
+      .getAttribute("src")
+      .endsWith("victory.png");
   return matchData;
 }
 

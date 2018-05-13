@@ -55,7 +55,7 @@ class PlayersRegister {
         score: matchData["score"],
         result: matchData["result"],
         tournamentId: matchData["trounament id"],
-        tournamentName: matchData["trounament name"],
+        tournamentName: matchData["tournament name"],
         type: TennisMatchType.single,
         winner: matchData["won"] == true
             ? TennisMatchWinner.first
