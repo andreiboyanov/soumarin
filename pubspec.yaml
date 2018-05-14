@@ -21,7 +21,7 @@ dev_dependencies:
   flutter_launcher_icons: "^0.3.2"
 
 flutter_icons:
-  image_path: "images/single-player.png"
+  image_path: "images/sousmarin.png"
   android: true
   ios: true
 
