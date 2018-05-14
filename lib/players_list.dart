@@ -73,26 +73,34 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
             padding: EdgeInsets.all(12.0),
           ),
           new Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Padding(
-                  padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
-                  child: new Text(
-                        ""
-                            "${widget.player.firstName} "
-                            "${widget.player.lastName} ",
-                        style: new TextStyle(
-                          fontSize: 18.0,
-                        ),
-                      ),
+            child: new GestureDetector(
+              onTap: () => Navigator.push(
+                context,
+                new MaterialPageRoute(
+                  builder: (context) => new PlayerDetails(widget.player),
                 ),
-                new Text(
-                    "${widget.player.id} "
-                        "${widget.player.singleRanking} "
-                        "${widget.player.clubName} (${widget.player.clubId})",
+              ),
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  new Padding(
+                    padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                    child: new Text(
+                          ""
+                              "${widget.player.firstName} "
+                              "${widget.player.lastName} ",
+                          style: new TextStyle(
+                            fontSize: 18.0,
+                          ),
+                        ),
                   ),
-              ],
+                  new Text(
+                      "${widget.player.id} "
+                          "${widget.player.singleRanking} "
+                          "${widget.player.clubName} (${widget.player.clubId})",
+                    ),
+                ],
+              ),
             ),
           ),
           new IconButton(
@@ -108,12 +116,6 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
                     : Icons.favorite_border,
                 size: 16.0),
           ),
-//            onTap: () => Navigator.push(
-//                  context,
-//                  new MaterialPageRoute(
-//                    builder: (context) => new PlayerDetails(widget.player),
-//                  ),
-//                ),
         ],
       ),
     );
