@@ -26,16 +26,14 @@ class _PlayerDetailsState extends State<PlayerDetails> {
   @override
   initState() {
     super.initState();
-    final thisYear = new DateTime.now().year;
     widget.playersRegister.getPlayerDetails(widget.player).then((updatePlayer) {
-      setState(() {
-        widget.singleMatches.matches = widget.player.singleMatches[thisYear];
-      });
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final thisYear = new DateTime.now().year;
     final mainInfoPanel = new Container(
       padding: EdgeInsets.all(32.0),
       child: new Row(
@@ -120,7 +118,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
           });
         },
         children: <ExpansionPanel>[
-          widget.singleMatches.build(),
+          widget.singleMatches.build(widget.player.singleMatches[thisYear]),
         ],
       ),
     );
