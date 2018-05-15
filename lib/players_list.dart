@@ -59,64 +59,65 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
   build(BuildContext context) {
     return new Padding(
       padding: const EdgeInsets.only(top: 24.0),
-      child: new Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          new IconButton(
-            icon: new CircleAvatar(
-              backgroundImage: getImageProvider(widget.player.photoUrl),
-            ),
-            onPressed: () => setState(() => selected = !selected),
-            alignment: Alignment.topLeft,
-            iconSize: 48.0,
-            padding: EdgeInsets.all(12.0),
-          ),
-          new Expanded(
-            child: new GestureDetector(
-              onTap: () => Navigator.push(
-                context,
-                new MaterialPageRoute(
-                  builder: (context) => new PlayerDetails(widget.player),
-                ),
+      child: new GestureDetector(
+        onTap: () => Navigator.push(
+              context,
+              new MaterialPageRoute(
+                builder: (context) => new PlayerDetails(widget.player),
               ),
+            ),
+        behavior: HitTestBehavior.opaque,
+        child: new Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            new IconButton(
+              icon: new CircleAvatar(
+                backgroundImage: getImageProvider(widget.player.photoUrl),
+              ),
+              onPressed: () => setState(() => selected = !selected),
+              alignment: Alignment.topLeft,
+              iconSize: 48.0,
+              padding: EdgeInsets.all(12.0),
+            ),
+            new Expanded(
               child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   new Padding(
-                    padding: const EdgeInsets.only(top: 12.0, bottom: 12.0),
+                    padding: const EdgeInsets.only(top: 8.0),
                     child: new Text(
-                          ""
-                              "${widget.player.firstName} "
-                              "${widget.player.lastName} ",
-                          style: new TextStyle(
-                            fontSize: 18.0,
-                          ),
-                        ),
+                      ""
+                          "${widget.player.firstName} "
+                          "${widget.player.lastName} ",
+                      style: new TextStyle(
+                        fontSize: 18.0,
+                      ),
+                    ),
                   ),
                   new Text(
-                      "${widget.player.id} "
-                          "${widget.player.singleRanking} "
-                          "${widget.player.clubName} (${widget.player.clubId})",
-                    ),
+                    "${widget.player.id} "
+                        "${widget.player.singleRanking} "
+                        "${widget.player.clubName} (${widget.player.clubId})",
+                  ),
                 ],
               ),
             ),
-          ),
-          new IconButton(
-            onPressed: () => setState(
-                  () {
-                    widget.player.toggleFavorited();
-                    PlayersList.of(context).onPlayerChanged(widget.player);
-                  },
-                ),
-            icon: new Icon(
-                widget.player.isFavorited
-                    ? Icons.favorite
-                    : Icons.favorite_border,
-                size: 16.0),
-          ),
-        ],
+            new IconButton(
+              onPressed: () => setState(
+                    () {
+                      widget.player.toggleFavorited();
+                      PlayersList.of(context).onPlayerChanged(widget.player);
+                    },
+                  ),
+              icon: new Icon(
+                  widget.player.isFavorited
+                      ? Icons.favorite
+                      : Icons.favorite_border,
+                  size: 16.0),
+            ),
+          ],
+        ),
       ),
     );
   }
