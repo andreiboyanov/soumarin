@@ -18,7 +18,7 @@ class EndlessList extends StatefulWidget {
 class _EndlessListState extends State<EndlessList> {
   List _items = new List();
   int _itemsCount = 1;
-  String _currentFilter = "";
+  var _currentFilter = {"name": ""};
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class _EndlessListState extends State<EndlessList> {
 }
 
 class FilteredEndlessList extends InheritedWidget {
-  final String filter;
+  final Map<String, Object> filter;
 
   const FilteredEndlessList({Key key, this.filter, Widget child})
       : super(key: key, child: child);
