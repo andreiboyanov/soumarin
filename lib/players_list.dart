@@ -35,7 +35,7 @@ class _PlayersListState extends State<PlayersList> {
   }
 
   _findPlayers({filter, start, count}) => playerService.findPlayers(
-      filter: {"name": filter}, start: start, max: count == null ? 20 : count);
+      filter: filter, start: start, max: count == null ? 20 : count);
 
   _buildPlayerItem(BuildContext context, Player player) =>
       new PlayerItemWidget(player);

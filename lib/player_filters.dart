@@ -3,21 +3,23 @@ import "package:flutter/material.dart";
 import "players_list.dart";
 import "endless_list.dart";
 
-abstract class PlayerFilter {
+import "types/player_filter.dart";
+
+abstract class PlayerFilterWidget {
   Widget filterWidgetBuilder(BuildContext context,
-      {@required onFilterChanged(Map<String, Object> filter)});
+      {@required onFilterChanged(PlayerFilter filter)});
 
   Widget playersListBuilder(BuildContext context,
-      {@required Map<String, Object> filter});
+      {@required PlayerFilter filter});
 }
 
-class PlayerFilterByFamilyName implements PlayerFilter {
-  Function(Map<String, Object> filter) onFilterChangedCallback;
+class PlayerFilterByFamilyName implements PlayerFilterWidget {
+  Function(PlayerFilter filter) onFilterChangedCallback;
   String currentFilter;
 
   @override
   Widget filterWidgetBuilder(BuildContext context,
-      {@required onFilterChanged(Map<String, Object> filter)}) {
+      {@required onFilterChanged(PlayerFilter filter)}) {
     onFilterChangedCallback = onFilterChanged;
     return new TextField(
       autofocus: false,
@@ -31,11 +33,11 @@ class PlayerFilterByFamilyName implements PlayerFilter {
 
   @override
   Widget playersListBuilder(BuildContext context,
-      {@required Map<String, Object> filter}) {
+      {@required PlayerFilter filter}) {
     return new FilteredEndlessList(filter: filter, child: new PlayersList());
   }
 
   void _onFilterChanged(String newFilter) {
-    onFilterChangedCallback(new Map<String, Object>.from({"name": newFilter}));
+    onFilterChangedCallback(PlayerFilter(lastName: newFilter));
   }
 }

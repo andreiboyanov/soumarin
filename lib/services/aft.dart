@@ -16,7 +16,7 @@ const PLAYER_INFO_LABELS = {
   "Club:": "club",
 };
 
-Future<Map<String, dynamic>> aftGetPlayerDetails(String playerId) async {
+Future<Map<String, Object>> aftGetPlayerDetails(String playerId) async {
   final url = "http://www.aftnet.be/MyAFT/Players/Detail/$playerId";
   final response = await http.get(url);
   final soup = new Soup(response.body).body;
@@ -48,8 +48,8 @@ Future<Map<String, dynamic>> aftGetPlayerDetails(String playerId) async {
   return playerData;
 }
 
-Map<String, dynamic> _parseSingleMatch(List<SoupElement> infoElements) {
-  final matchData = new Map<String, dynamic>();
+Map<String, Object> _parseSingleMatch(List<SoupElement> infoElements) {
+  final matchData = new Map<String, Object>();
 
   // Get the tournament name and date form a string in the
   // form "FORÊT DE SOIGNES 28/12/2017"

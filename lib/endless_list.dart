@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import "types/player_filter.dart";
+
 
 class EndlessList extends StatefulWidget {
   static _EndlessListState of(BuildContext context) =>
@@ -18,7 +20,7 @@ class EndlessList extends StatefulWidget {
 class _EndlessListState extends State<EndlessList> {
   List _items = new List();
   int _itemsCount = 1;
-  var _currentFilter = {"name": ""};
+  var _currentFilter = new PlayerFilter();
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +83,7 @@ class _EndlessListState extends State<EndlessList> {
 }
 
 class FilteredEndlessList extends InheritedWidget {
-  final Map<String, Object> filter;
+  final PlayerFilter filter;
 
   const FilteredEndlessList({Key key, this.filter, Widget child})
       : super(key: key, child: child);

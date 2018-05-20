@@ -1,15 +1,16 @@
 import "dart:async";
 
 import "../types/player.dart";
+import "../types/player_filter.dart";
 import "../types/match.dart";
 import "../db.dart";
 import "aft.dart";
 
 class PlayersRegister {
   final _db = SousMarinDb.instance;
-  var _currentFilter = new Map<String, Object>();
+  var _currentFilter = new PlayerFilter();
 
-  Future findPlayers({Map<String, Object> filter, start = 0, max = 20}) async {
+  Future findPlayers({PlayerFilter filter, start = 0, max = 20}) async {
     if (filter != null) {
       _currentFilter = filter;
     }
@@ -17,7 +18,7 @@ class PlayersRegister {
     await for (Player player in aftSearchPlayers(
         start: start,
         count: max,
-        name: _currentFilter.containsKey("name") ? filter["name"] : "")) {
+        name: _currentFilter.lastName)) {
       final dbPlayer = await _db.getPlayer(player.id);
       if (dbPlayer != null) {
         player.isFavorited = dbPlayer['isFavorited'];

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'main_drawer.dart';
 import 'player_filters.dart';
 
+import "types/player_filter.dart";
+
 class PlayersHome extends StatefulWidget {
   final filterByFamilyName = new PlayerFilterByFamilyName();
 
@@ -12,8 +14,8 @@ class PlayersHome extends StatefulWidget {
 
 class _PlayersHomeState extends State<PlayersHome>
     with SingleTickerProviderStateMixin {
-  String filter = "";
-  PlayerFilter currentFilterBuilder;
+  var filter = new PlayerFilter();
+  PlayerFilterWidget currentFilterBuilder;
 
   @override
   initState() {
@@ -33,7 +35,7 @@ class _PlayersHomeState extends State<PlayersHome>
         actions: <Widget>[
           new PopupMenuButton(
             itemBuilder: (BuildContext context) =>
-                <PopupMenuItem<PlayerFilter>>[
+                <PopupMenuItem<PlayerFilterWidget>>[
                   new PopupMenuItem(
                     child: new Text("By Family Name"),
                     value: widget.filterByFamilyName,
@@ -54,9 +56,9 @@ class _PlayersHomeState extends State<PlayersHome>
     super.dispose();
   }
 
-  void _filterPlayers(Map<String, Object> newFilter) {
+  void _filterPlayers(PlayerFilter newFilter) {
     setState(() {
-      filter = newFilter["name"];
+      filter = newFilter;
     });
   }
 }
