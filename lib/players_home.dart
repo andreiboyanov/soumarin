@@ -38,22 +38,26 @@ class _PlayersHomeState extends State<PlayersHome>
             itemBuilder: (BuildContext context) =>
                 <PopupMenuItem<PlayerFilterWidget>>[
                   new PopupMenuItem(
-                    child: new Text("By last name"),
+                    child: new Padding(
+                      padding: new EdgeInsets.all(12.0),
+                      child: new Text("By last name"),
+                    ),
                     value: widget.filterByFamilyName,
                   ),
                   new PopupMenuItem(
-                    child: new Text("Favorite players"),
+                    child: new Padding(
+                      padding: new EdgeInsets.all(12.0),
+                      child: new Text("Favorite players"),
+                    ),
                     value: widget.filterFavorited,
                   ),
                 ],
             onSelected: (selected) =>
                 setState(() => currentFilterBuilder = selected),
-
           )
         ],
       ),
-      body:
-          currentFilterBuilder.playersListBuilder(context, filter: filter),
+      body: currentFilterBuilder.playersListBuilder(context, filter: filter),
     );
   }
 
