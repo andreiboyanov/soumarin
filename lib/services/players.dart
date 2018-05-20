@@ -79,4 +79,12 @@ class PlayersRegister {
   Future savePlayer(Player player) {
     return _db.savePlayer(player);
   }
+
+  Future toggleFavorited(Player player) {
+    player.toggleFavorited();
+    if (player.isFavorited)
+      return savePlayer(player);
+    else
+      return deletePlayer(player);
+  }
 }

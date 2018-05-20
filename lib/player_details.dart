@@ -129,9 +129,11 @@ class _PlayerDetailsState extends State<PlayerDetails> {
         title: new Text("${widget.player.firstName} ${widget.player.lastName}"),
         actions: <Widget>[
           new IconButton(
-            onPressed: () => setState(() {
-                  widget.player.toggleFavorited();
-                }),
+            onPressed: () {
+              widget.playersRegister
+                  .toggleFavorited(widget.player)
+                  .then((result) => setState(() {}));
+            },
             icon: new Icon(
               widget.player.isFavorited
                   ? Icons.favorite
