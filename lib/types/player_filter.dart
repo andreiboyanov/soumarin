@@ -16,27 +16,28 @@ class PlayerFilter extends Player {
     this.doublePointsTo = "",
     clubId = "",
     clubName = "",
+    isFavorited = false,
   }) : super(
           id: id,
           firstName: firstName,
           lastName: lastName,
           clubId: clubId,
           clubName: clubName,
-        );
+        ) {
+    this.isFavorited = isFavorited;
+  }
 
   @override
   bool operator ==(other) {
-    return (
-        id == other.id &&
-        firstName ==  other.firstName &&
+    return (id == other.id &&
+        firstName == other.firstName &&
         lastName == other.lastName &&
         clubId == other.clubId &&
         clubName == other.clubName &&
         singleRankingFrom == other.singleRankingFrom &&
         singleRankingTo == other.singleRankingTo &&
         doublePointsFrom == other.doublePointsFrom &&
-        doublePointsTo == other.doublePointsTo
-    );
-
+        doublePointsTo == other.doublePointsTo &&
+        isFavorited == other.isFavorited);
   }
 }

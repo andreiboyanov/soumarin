@@ -14,18 +14,20 @@ class Player {
   final singleMatches = Map<int, List<TennisMatch>>();
   final doubleMatches = Map<int, List<TennisMatch>>();
 
-  Player(
-      {this.id = "",
-      this.firstName = "",
-      this.lastName = "",
-      this.singleRanking = "",
-      this.doublePoints = "",
-      this.clubId = "",
-      this.clubName = "",
-      this.photoUrl = "",
-      this.affiliateFrom = ""});
+  Player({
+    this.id = "",
+    this.firstName = "",
+    this.lastName = "",
+    this.singleRanking = "",
+    this.doublePoints = "",
+    this.clubId = "",
+    this.clubName = "",
+    this.photoUrl = "",
+    this.affiliateFrom = "",
+    this.isFavorited = false,
+  });
 
-  factory Player.fromMap(Map<String, Object> values) => values != null
+  factory Player.fromMap(final values) => values != null
       ? new Player(
           id: values["id"],
           firstName: values["firstName"],
@@ -33,7 +35,11 @@ class Player {
           singleRanking: values["singleRanking"],
           doublePoints: values["doublePoints"],
           clubId: values["clubId"],
-          clubName: values["clubName"])
+          clubName: values["clubName"],
+          affiliateFrom: values["affiliateFrom"],
+          isFavorited:
+              values["isFavorited"] == null ? false : values["isFavorited"],
+        )
       : null;
 
   void toggleFavorited() {

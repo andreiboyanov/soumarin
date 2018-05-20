@@ -37,9 +37,15 @@ class SousMarinDb {
     return result;
   }
 
-  Stream getPlayers() async* {
+  Stream getPlayers({start=0, limit=20}) async* {
     Store playerStore = _db.getStore("players");
-    yield playerStore.records;
+//    final finder = new Finder(limit: limit, offset: start);
+//    final players = await playerStore.findRecords(finder);
+    if (start > 0)
+      return;
+
+    await for (final dbPlayer in playerStore.records)
+      yield dbPlayer;
   }
 
   Future getPlayer(id) async {

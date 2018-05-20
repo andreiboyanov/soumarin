@@ -29,7 +29,12 @@ class PlayersRegister {
   }
 
   Future getPlayers({start = 0, max = 20}) async {
-    return new List<Player>();
+    final players = new List<Player>();
+    await for (final dbPlayer in _db.getPlayers(start: start, limit: max)) {
+      final player = new Player.fromMap(dbPlayer);
+      players.add(player);
+    }
+    return players;
   }
 
   Future<Player> getPlayer(String playerId) async {

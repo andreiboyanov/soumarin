@@ -9,7 +9,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.0
   exportable: ^0.1.0
-  sembast: ^1.7.0
+  sembast: any # ^1.7.0
   http: ^0.11.3+16
   html: any
   path_provider: ^0.4.0

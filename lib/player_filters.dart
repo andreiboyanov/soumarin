@@ -15,7 +15,6 @@ abstract class PlayerFilterWidget {
 
 class PlayerFilterByFamilyName implements PlayerFilterWidget {
   Function(PlayerFilter filter) onFilterChangedCallback;
-  String currentFilter;
 
   @override
   Widget filterWidgetBuilder(BuildContext context,
@@ -39,5 +38,22 @@ class PlayerFilterByFamilyName implements PlayerFilterWidget {
 
   void _onFilterChanged(String newFilter) {
     onFilterChangedCallback(PlayerFilter(lastName: newFilter));
+  }
+}
+
+class PlayerFilterFavorite implements PlayerFilterWidget {
+  final favoritesFilter = new PlayerFilter(isFavorited: true);
+
+  @override
+  Widget filterWidgetBuilder(BuildContext context,
+      {@required onFilterChanged(PlayerFilter filter)}) {
+    return new Text("Favorite Players");
+  }
+
+  @override
+  Widget playersListBuilder(BuildContext context,
+      {@required PlayerFilter filter}) {
+    return new FilteredEndlessList(
+        filter: favoritesFilter, child: new PlayersList());
   }
 }

@@ -7,6 +7,7 @@ import "types/player_filter.dart";
 
 class PlayersHome extends StatefulWidget {
   final filterByFamilyName = new PlayerFilterByFamilyName();
+  final filterFavorited = new PlayerFilterFavorite();
 
   @override
   createState() => new _PlayersHomeState();
@@ -37,12 +38,17 @@ class _PlayersHomeState extends State<PlayersHome>
             itemBuilder: (BuildContext context) =>
                 <PopupMenuItem<PlayerFilterWidget>>[
                   new PopupMenuItem(
-                    child: new Text("By Family Name"),
+                    child: new Text("By last name"),
                     value: widget.filterByFamilyName,
+                  ),
+                  new PopupMenuItem(
+                    child: new Text("Favorite players"),
+                    value: widget.filterFavorited,
                   ),
                 ],
             onSelected: (selected) =>
                 setState(() => currentFilterBuilder = selected),
+
           )
         ],
       ),

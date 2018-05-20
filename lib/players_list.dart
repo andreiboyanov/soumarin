@@ -34,8 +34,16 @@ class _PlayersListState extends State<PlayersList> {
     return new EndlessList(_buildPlayerItem, _findPlayers);
   }
 
-  _findPlayers({filter, start, count}) => playerService.findPlayers(
-      filter: filter, start: start, max: count == null ? 20 : count);
+  _findPlayers({filter, start, count}) {
+    if (filter.isFavorited) {
+      final players = playerService.getPlayers(
+          start: start, max: count == null ? 20 : count);
+      return players;
+    } else {
+      return playerService.findPlayers(
+          filter: filter, start: start, max: count == null ? 20 : count);
+    }
+  }
 
   _buildPlayerItem(BuildContext context, Player player) =>
       new PlayerItemWidget(player);
