@@ -19,16 +19,6 @@ class PlayersList extends StatefulWidget {
 class _PlayersListState extends State<PlayersList> {
   final playerService = new PlayersRegister();
 
-  void onPlayerChanged(Player player) async {
-    if (player.isFavorited) {
-      await playerService.savePlayer(player);
-      setState(() {});
-    } else {
-      await playerService.deletePlayer(player);
-      setState(() {});
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return new EndlessList(_buildPlayerItem, _findPlayers);
@@ -112,12 +102,13 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
               ),
             ),
             new IconButton(
-              onPressed: () => setState(
-                    () {
-                      widget.player.toggleFavorited();
-                      PlayersList.of(context).onPlayerChanged(widget.player);
-                    },
-                  ),
+              onPressed: () {
+                PlayersList
+                    .of(context)
+                    .playerService
+                    .toggleFavorited(widget.player)
+                    .then((result) => setState(() {}));
+              },
               icon: new Icon(
                   widget.player.isFavorited
                       ? Icons.favorite
