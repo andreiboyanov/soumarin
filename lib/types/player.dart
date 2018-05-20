@@ -36,6 +36,7 @@ class Player {
           doublePoints: values["doublePoints"],
           clubId: values["clubId"],
           clubName: values["clubName"],
+          photoUrl: values["photoUrl"],
           affiliateFrom: values["affiliateFrom"],
           isFavorited:
               values["isFavorited"] == null ? false : values["isFavorited"],

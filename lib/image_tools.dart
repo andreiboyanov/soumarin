@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:validator/validator.dart';
 import 'dart:convert' show Base64Decoder;
+import "dart:io";
 
 ImageProvider getImageProvider(String url) {
   ImageProvider image;
@@ -15,6 +16,9 @@ ImageProvider getImageProvider(String url) {
       final imageData = decoder.convert(data);
       image = new MemoryImage(imageData);
     }
+  }
+  if (image == null) {
+    image = new ExactAssetImage("images/sousmarin.png");
   }
   return image;
 }
