@@ -16,9 +16,11 @@ class PlayersRegister {
     }
     final players = new List<Player>();
     await for (Player player in aftSearchPlayers(
-        start: start,
-        count: max,
-        name: _currentFilter.lastName)) {
+      start: start,
+      count: max,
+      name: _currentFilter.lastName,
+      id: _currentFilter.id,
+    )) {
       final dbPlayer = await _db.getPlayer(player.id);
       if (dbPlayer != null) {
         player.isFavorited = dbPlayer['isFavorited'];

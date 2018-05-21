@@ -118,7 +118,8 @@ Stream<Player> aftSearchPlayers(
     {start: 0,
     count: 10,
     name: "",
-    region: 1,
+    id: "",
+    region: "1",
     male: true,
     female: true,
     clubId: ""}) async* {
@@ -126,13 +127,13 @@ Stream<Player> aftSearchPlayers(
       ? "http://www.aftnet.be/MyAFT/Players/SearchPlayers"
       : "http://www.aftnet.be/MyAFT/Players/LoadMoreResults";
   final response = await http.post(url, body: {
-    "Regions": "1",
+    "Regions": region,
     "currentTotalRecords": start.toString(),
     "sortExpression": "",
-    "AffiliationNumberFrom": "",
-    "AffiliationNumberTo": "",
+    "AffiliationNumberFrom": id,
+    "AffiliationNumberTo": id == "" ? "" : id + "9" * (7 - id.length),
     "NameFrom": name,
-    "NameTo": "",
+    "NameTo": name == "" ? "" : "${name}Z",
     "BirthDateFrom": "",
     "BirthDateTo": "",
     "SingleRankingIdFrom": "1",

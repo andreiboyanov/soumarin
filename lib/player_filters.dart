@@ -13,8 +13,12 @@ abstract class PlayerFilterWidget {
       {@required PlayerFilter filter});
 }
 
-class PlayerFilterByFamilyName implements PlayerFilterWidget {
+class PlayerFilterSingleField implements PlayerFilterWidget {
   Function(PlayerFilter filter) onFilterChangedCallback;
+  PlayerFilter Function(String filterValue) playerFilterBuilder;
+  final String hint;
+
+  PlayerFilterSingleField(this.hint, this.playerFilterBuilder);
 
   @override
   Widget filterWidgetBuilder(BuildContext context,
@@ -25,7 +29,7 @@ class PlayerFilterByFamilyName implements PlayerFilterWidget {
       onSubmitted: _onFilterChanged,
       decoration: new InputDecoration(
         icon: new Icon(Icons.search),
-        hintText: "AFT Players",
+        hintText: this.hint,
       ),
     );
   }
@@ -37,7 +41,7 @@ class PlayerFilterByFamilyName implements PlayerFilterWidget {
   }
 
   void _onFilterChanged(String newFilter) {
-    onFilterChangedCallback(PlayerFilter(lastName: newFilter));
+    onFilterChangedCallback(playerFilterBuilder(newFilter));
   }
 }
 

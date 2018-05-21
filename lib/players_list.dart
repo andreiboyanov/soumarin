@@ -109,11 +109,16 @@ class _PlayerItemWidgetState extends State<PlayerItemWidget> {
                     .toggleFavorited(widget.player)
                     .then((result) => setState(() {}));
               },
-              icon: new Icon(
-                  widget.player.isFavorited
-                      ? Icons.favorite
-                      : Icons.favorite_border,
-                  size: 16.0),
+              icon: widget.player.isFavorited
+                  ? new Icon(
+                      Icons.favorite,
+                      size: 16.0,
+                      color: Colors.red,
+                    )
+                  : new Icon(
+                      Icons.favorite_border,
+                      size: 16.0,
+                    ),
             ),
           ],
         ),

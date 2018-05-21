@@ -27,6 +27,14 @@ class PlayerFilter extends Player {
     this.isFavorited = isFavorited;
   }
 
+  factory PlayerFilter.byId(String id) {
+    return new PlayerFilter(id: id);
+  }
+
+  factory PlayerFilter.byLastName(String lastName) {
+    return new PlayerFilter(lastName: lastName);
+  }
+
   @override
   bool operator ==(other) {
     return (id == other.id &&

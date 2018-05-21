@@ -6,7 +6,10 @@ import 'player_filters.dart';
 import "types/player_filter.dart";
 
 class PlayersHome extends StatefulWidget {
-  final filterByFamilyName = new PlayerFilterByFamilyName();
+  final filterByFamilyName = new PlayerFilterSingleField("AFT Players",
+      (String filterValue) => new PlayerFilter(lastName: filterValue));
+  final filterById = new PlayerFilterSingleField("AFT Players (id)",
+          (String filterValue) => new PlayerFilter(id: filterValue));
   final filterFavorited = new PlayerFilterFavorite();
 
   @override
@@ -37,6 +40,13 @@ class _PlayersHomeState extends State<PlayersHome>
           new PopupMenuButton(
             itemBuilder: (BuildContext context) =>
                 <PopupMenuItem<PlayerFilterWidget>>[
+                  new PopupMenuItem(
+                    child: new Padding(
+                      padding: new EdgeInsets.all(12.0),
+                      child: new Text("By id"),
+                    ),
+                    value: widget.filterById,
+                  ),
                   new PopupMenuItem(
                     child: new Padding(
                       padding: new EdgeInsets.all(12.0),
