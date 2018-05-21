@@ -20,8 +20,8 @@ Future<Map<String, Object>> aftGetPlayerDetails(String playerId) async {
   final url = "http://www.aftnet.be/MyAFT/Players/Detail/$playerId";
   final response = await http.get(url);
   final soup = new Soup(response.body).body;
-  final detailBody =
-      soup.findAll("div", attributeClass: "detail-body player", limit: 1)[0];
+  final detailBody = soup.findAll("div",
+      attributes: {"class": "detail-body player"}, limit: 1)[0];
   final info = detailBody.find(id: 'colInfo').findFirst('dl');
   String currentLabel;
   final playerData = new Map<String, dynamic>();
@@ -34,14 +34,26 @@ Future<Map<String, Object>> aftGetPlayerDetails(String playerId) async {
       }
     }
   }
-  // FIXME: remove the following commented lines
-//  if (playerData.containsKey("first affiliation")) {
-//    player.affiliateFrom = playerData["first affiliation"];
-//  }
+
+  playerData["single matches"] = [];
   final singleMatches =
       soup.find(id: "divPlayerDetailTournamentSingleResultData").findAll("dl");
-  playerData["single matches"] = [];
   for (final matchElement in singleMatches) {
+    final infoElements = matchElement.findAll("dd");
+    playerData["single matches"].add(_parseSingleMatch(infoElements));
+  }
+
+  final interclubsDataUrl = soup
+      .findAll("a", attributes: {'data-target': '#tabPlayerInterclubs'})[0]
+      .getAttribute("data-url");
+  final interclubResponse =
+      await http.get("http://www.aftnet.be/$interclubsDataUrl");
+  final interclubSoup = new Soup(interclubResponse.body).body;
+  final singleMatchesInterclubs = interclubSoup
+      .find(id: "collapse_player_interclubs_single_result")
+      .findFirst("div")
+      .findAll("dl");
+  for (final matchElement in singleMatchesInterclubs) {
     final infoElements = matchElement.findAll("dd");
     playerData["single matches"].add(_parseSingleMatch(infoElements));
   }

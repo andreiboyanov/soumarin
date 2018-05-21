@@ -7,20 +7,33 @@ class SoupElement {
 
   SoupElement(this.htmlElement);
 
-  List<SoupElement> findAll(String tag, {String attributeClass, int limit}) {
+  List<SoupElement> findAll(String tag,
+      {Map<String, String> attributes, int limit}) {
     final result = new List<SoupElement>();
     for (final child in htmlElement.children) {
       if (limit != null && result.length >= limit) {
         break;
       }
       final soupChild = new SoupElement(child);
-      if ((tag == null || child.localName == tag) &&
-          this.attributeValueContains(child, 'class', attributeClass)) {
+      bool match = true;
+      if (tag == null || child.localName == tag) {
+        if (attributes != null) {
+          attributes.forEach((name, value) {
+            if (attributeValueContains(child, name, value) == false) {
+              match = false;
+              return;
+            }
+          });
+        }
+      } else {
+        match = false;
+      }
+      if (match) {
         result.add(soupChild);
       } else {
         result.addAll(soupChild.findAll(
           tag,
-          attributeClass: attributeClass,
+          attributes: attributes,
           limit: limit == null ? null : limit - result.length,
         ));
       }
@@ -57,6 +70,7 @@ class SoupElement {
   }
 
   String get text => htmlElement.text;
+
   String get tag => htmlElement.localName;
 
   bool attributeValueContains(
@@ -68,7 +82,7 @@ class SoupElement {
       return false;
     }
     if (html.attributes[attributeName].contains(attributeValue)) {
-      return  true;
+      return true;
     }
     return false;
   }
