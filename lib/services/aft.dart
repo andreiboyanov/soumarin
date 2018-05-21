@@ -43,6 +43,7 @@ Future<Map<String, Object>> aftGetPlayerDetails(String playerId) async {
     playerData["single matches"].add(_parseSingleMatch(infoElements));
   }
 
+  playerData["single interclub matches"] = [];
   final interclubsDataUrl = soup
       .findAll("a", attributes: {'data-target': '#tabPlayerInterclubs'})[0]
       .getAttribute("data-url");
@@ -55,7 +56,7 @@ Future<Map<String, Object>> aftGetPlayerDetails(String playerId) async {
       .findAll("dl");
   for (final matchElement in singleMatchesInterclubs) {
     final infoElements = matchElement.findAll("dd");
-    playerData["single matches"].add(_parseSingleMatch(infoElements));
+    playerData["single interclub matches"].add(_parseSingleMatch(infoElements));
   }
   return playerData;
 }

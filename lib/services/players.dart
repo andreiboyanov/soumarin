@@ -49,29 +49,39 @@ class PlayersRegister {
     player.affiliateFrom = playerData["first affiliation"];
     player.singleMatches[currentYear] = new List<TennisMatch>();
     for (final matchData in playerData["single matches"]) {
-      final nameComponents = Player.parseName(matchData["opponent name"]);
-      final opponent = new Player(
-        id: matchData["opponent id"],
-        firstName: nameComponents[0],
-        lastName: nameComponents[1],
-        singleRanking: matchData["opponent ranking"],
-      );
-      final match = new TennisMatch(
-        matchData["date"],
-        player,
-        opponent,
-        score: matchData["score"],
-        result: matchData["result"],
-        tournamentId: matchData["trounament id"],
-        tournamentName: matchData["tournament name"],
-        type: TennisMatchType.single,
-        winner: matchData["won"] == true
-            ? TennisMatchWinner.first
-            : TennisMatchWinner.second,
-      );
+      final match = _parseMatchData(matchData, player);
       player.singleMatches[currentYear].add(match);
     }
+    player.singleInterclubMatches[currentYear] = new List<TennisMatch>();
+    for (final matchData in playerData["single interclub matches"]) {
+      final match = _parseMatchData(matchData, player);
+      player.singleInterclubMatches[currentYear].add(match);
+    }
     return player;
+  }
+
+  TennisMatch _parseMatchData(matchData, Player player) {
+    final nameComponents = Player.parseName(matchData["opponent name"]);
+    final opponent = new Player(
+      id: matchData["opponent id"],
+      firstName: nameComponents[0],
+      lastName: nameComponents[1],
+      singleRanking: matchData["opponent ranking"],
+    );
+    final match = new TennisMatch(
+      matchData["date"],
+      player,
+      opponent,
+      score: matchData["score"],
+      result: matchData["result"],
+      tournamentId: matchData["trounament id"],
+      tournamentName: matchData["tournament name"],
+      type: TennisMatchType.single,
+      winner: matchData["won"] == true
+          ? TennisMatchWinner.first
+          : TennisMatchWinner.second,
+    );
+    return match;
   }
 
   Future deletePlayer(Player player) async {

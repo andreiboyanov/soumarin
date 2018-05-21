@@ -15,6 +15,7 @@ class PlayerDetails extends StatefulWidget {
   final playersRegister = new PlayersRegister();
   final matchesRegister = new MatchesRegister();
   final singleMatches = new ExpansionPanelMatchList();
+  final singleInterclubMatches = new ExpansionPanelMatchList();
 
   PlayerDetails(this.player);
 
@@ -110,7 +111,7 @@ class _PlayerDetailsState extends State<PlayerDetails> {
       ),
     );
 
-    final matchesExpansionPanelList = new Container(
+    final singleMatchesList = new Container(
       child: new ExpansionPanelList(
         expansionCallback: (int index, bool isExpanded) {
           setState(() {
@@ -119,6 +120,19 @@ class _PlayerDetailsState extends State<PlayerDetails> {
         },
         children: <ExpansionPanel>[
           widget.singleMatches.build(widget.player.singleMatches[thisYear]),
+        ],
+      ),
+    );
+    final singleInterclubMatchesList = new Container(
+      child: new ExpansionPanelList(
+        expansionCallback: (int index, bool isExpanded) {
+          setState(() {
+            widget.singleInterclubMatches.isExpanded = !isExpanded;
+          });
+        },
+        children: <ExpansionPanel>[
+          widget.singleInterclubMatches
+              .build(widget.player.singleInterclubMatches[thisYear]),
         ],
       ),
     );
@@ -150,7 +164,8 @@ class _PlayerDetailsState extends State<PlayerDetails> {
             gaplessPlayback: true,
           ),
           mainInfoPanel,
-          matchesExpansionPanelList,
+          singleMatchesList,
+          singleInterclubMatchesList,
           new Container(
             padding: EdgeInsets.all(24.0),
             child: new Center(

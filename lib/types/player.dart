@@ -13,6 +13,8 @@ class Player {
   bool isFavorited = false;
   final singleMatches = Map<int, List<TennisMatch>>();
   final doubleMatches = Map<int, List<TennisMatch>>();
+  final singleInterclubMatches = Map<int, List<TennisMatch>>();
+  final doubleInterclubMatches = Map<int, List<TennisMatch>>();
 
   Player({
     this.id = "",
