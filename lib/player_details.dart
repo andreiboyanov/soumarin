@@ -14,8 +14,9 @@ class PlayerDetails extends StatefulWidget {
   final Player player;
   final playersRegister = new PlayersRegister();
   final matchesRegister = new MatchesRegister();
-  final singleMatches = new ExpansionPanelMatchList();
-  final singleInterclubMatches = new ExpansionPanelMatchList();
+  final singleMatches = new ExpansionPanelMatchList("Single matches");
+  final singleInterclubMatches =
+      new ExpansionPanelMatchList("Single interclub matches");
 
   PlayerDetails(this.player);
 
