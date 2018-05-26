@@ -49,18 +49,69 @@ class PlayersRegister {
     player.affiliateFrom = playerData["first affiliation"];
     player.singleMatches[currentYear] = new List<TennisMatch>();
     for (final matchData in playerData["single matches"]) {
-      final match = _parseMatchData(matchData, player);
+      final match = _parseSingleMatchData(matchData, player);
       player.singleMatches[currentYear].add(match);
     }
     player.singleInterclubMatches[currentYear] = new List<TennisMatch>();
     for (final matchData in playerData["single interclub matches"]) {
-      final match = _parseMatchData(matchData, player);
+      final match = _parseSingleMatchData(matchData, player);
       player.singleInterclubMatches[currentYear].add(match);
+    }
+    player.doubleMatches[currentYear] = new List<TennisMatch>();
+    for (final matchData in playerData["double matches"]) {
+      final match = _parseDoubleMatchData(matchData, player);
+      player.doubleMatches[currentYear].add(match);
+    }
+    player.doubleInterclubMatches[currentYear] = new List<TennisMatch>();
+    for (final matchData in playerData["double interclub matches"]) {
+      final match = _parseDoubleMatchData(matchData, player);
+      player.doubleInterclubMatches[currentYear].add(match);
     }
     return player;
   }
 
-  TennisMatch _parseMatchData(matchData, Player player) {
+  TennisMatch _parseDoubleMatchData(matchData, Player player) {
+    List<String> nameComponents = Player.parseName(matchData["partner name"]);
+    final partner = new Player(
+      id: matchData["partner id"],
+      firstName: nameComponents[0],
+      lastName: nameComponents[1],
+      doublePoints: matchData["partner ranking"],
+    );
+    nameComponents = Player.parseName(matchData["opponent 1 name"]);
+    final opponent1 = new Player(
+      id: matchData["opponent 1 id"],
+      firstName: nameComponents[0],
+      lastName: nameComponents[1],
+      doublePoints: matchData["opponent 1 ranking"],
+    );
+    nameComponents = Player.parseName(matchData["opponent 2 name"]);
+    final opponent2 = new Player(
+      id: matchData["opponent 2 id"],
+      firstName: nameComponents[0],
+      lastName: nameComponents[1],
+      doublePoints: matchData["opponent 2 ranking"],
+    );
+    final match = new TennisMatch(
+      matchData["date"],
+      player,
+      opponent1,
+      player11: partner,
+      player21: opponent2,
+      score: matchData["score"],
+      result: matchData["result"],
+      tournamentId: matchData["trounament id"],
+      tournamentName: matchData["tournament name"],
+      category: matchData["category"],
+      type: TennisMatchType.double,
+      winner: matchData["won"] == true
+          ? TennisMatchWinner.first
+          : TennisMatchWinner.second,
+    );
+    return match;
+  }
+
+  TennisMatch _parseSingleMatchData(matchData, Player player) {
     final nameComponents = Player.parseName(matchData["opponent name"]);
     final opponent = new Player(
       id: matchData["opponent id"],
@@ -76,6 +127,7 @@ class PlayersRegister {
       result: matchData["result"],
       tournamentId: matchData["trounament id"],
       tournamentName: matchData["tournament name"],
+      category: matchData["category"],
       type: TennisMatchType.single,
       winner: matchData["won"] == true
           ? TennisMatchWinner.first

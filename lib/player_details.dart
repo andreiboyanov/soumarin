@@ -15,8 +15,11 @@ class PlayerDetails extends StatefulWidget {
   final playersRegister = new PlayersRegister();
   final matchesRegister = new MatchesRegister();
   final singleMatches = new ExpansionPanelMatchList("Single matches");
+  final doubleMatches = new ExpansionPanelMatchList("Double matches");
   final singleInterclubMatches =
       new ExpansionPanelMatchList("Single interclub matches");
+  final doubleInterclubMatches =
+      new ExpansionPanelMatchList("Double interclub matches");
 
   PlayerDetails(this.player);
 
@@ -124,6 +127,18 @@ class _PlayerDetailsState extends State<PlayerDetails> {
         ],
       ),
     );
+    final doubleMatchesList = new Container(
+      child: new ExpansionPanelList(
+        expansionCallback: (int index, bool isExpanded) {
+          setState(() {
+            widget.doubleMatches.isExpanded = !isExpanded;
+          });
+        },
+        children: <ExpansionPanel>[
+          widget.doubleMatches.build(widget.player.doubleMatches[thisYear]),
+        ],
+      ),
+    );
     final singleInterclubMatchesList = new Container(
       child: new ExpansionPanelList(
         expansionCallback: (int index, bool isExpanded) {
@@ -134,6 +149,19 @@ class _PlayerDetailsState extends State<PlayerDetails> {
         children: <ExpansionPanel>[
           widget.singleInterclubMatches
               .build(widget.player.singleInterclubMatches[thisYear]),
+        ],
+      ),
+    );
+    final doubleInterclubMatchesList = new Container(
+      child: new ExpansionPanelList(
+        expansionCallback: (int index, bool isExpanded) {
+          setState(() {
+            widget.doubleInterclubMatches.isExpanded = !isExpanded;
+          });
+        },
+        children: <ExpansionPanel>[
+          widget.doubleInterclubMatches
+              .build(widget.player.doubleInterclubMatches[thisYear]),
         ],
       ),
     );
@@ -167,6 +195,8 @@ class _PlayerDetailsState extends State<PlayerDetails> {
           mainInfoPanel,
           singleMatchesList,
           singleInterclubMatchesList,
+          doubleMatchesList,
+          doubleInterclubMatchesList,
           new Container(
             padding: EdgeInsets.all(24.0),
             child: new Center(

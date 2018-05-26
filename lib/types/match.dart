@@ -12,6 +12,7 @@ class TennisMatch {
   final DateTime date;
   final String tournamentId;
   final String tournamentName;
+  final String category;
 
   final List<List<int>> score;
   final String result;
@@ -26,6 +27,7 @@ class TennisMatch {
     this.player21,
     this.tournamentId = "",
     this.tournamentName = "",
+    this.category = "",
     this.score,
     this.result,
     this.winner,

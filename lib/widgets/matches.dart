@@ -47,7 +47,8 @@ class ExpansionPanelMatchList {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  new Text(title,
+                  new Text(
+                    title,
                     style: new TextStyle(
                       color: Colors.blueGrey,
                       fontSize: 16.0,
@@ -100,6 +101,10 @@ class ExpansionPanelMatchList {
                               ),
                             ),
                             new Text(
+                              "${match.category}",
+                              style: new TextStyle(),
+                            ),
+                            new Text(
                               "vs ${match.player2.firstName} "
                                   "${match.player2.lastName}"
                                   " (${match.player2.singleRanking})",
@@ -113,11 +118,57 @@ class ExpansionPanelMatchList {
                     ],
                   );
                 } else {
-                  result = new Column(
+                  result = new Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      new Text("Double matches not supported yet."),
-                      new Text("Sorry for the discrimination"),
+                      new Container(
+                        child: new Image.asset(
+                          match.winner == TennisMatchWinner.first
+                              ? "images/victory.png"
+                              : "images/defeat.png",
+                          width: 20.0,
+                        ),
+                        padding: new EdgeInsets.all(12.0),
+                      ),
+                      new Container(
+                        child: new Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Text(
+                              "${match.tournamentName} "
+                                  "${_formatDate(match.date)} ",
+                              style: new TextStyle(
+                                fontSize: 18.0,
+                              ),
+                            ),
+                            new Text(
+                              "${match.category}",
+                              style: new TextStyle(),
+                            ),
+                            new Text(
+                              "with ${match.player11.firstName} "
+                                  "${match.player11.lastName}"
+                                  " (${match.player11.doublePoints})",
+                              style: new TextStyle(),
+                            ),
+                            new Text(
+                              "vs ${match.player2.firstName} "
+                                  "${match.player2.lastName}"
+                                  " (${match.player2.doublePoints})",
+                              style: new TextStyle(),
+                            ),
+                            new Text(
+                              "and ${match.player21.firstName} "
+                                  "${match.player21.lastName}"
+                                  " (${match.player21.doublePoints})",
+                              style: new TextStyle(),
+                            ),
+                            new Text("${match.result}"),
+                          ],
+                        ),
+                        padding: new EdgeInsets.all(12.0),
+                      ),
                     ],
                   );
                 }
