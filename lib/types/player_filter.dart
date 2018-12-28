@@ -36,6 +36,22 @@ class PlayerFilter extends Player {
   }
 
   @override
+  int get hashCode {
+    return (
+        id.hashCode +
+        firstName.hashCode +
+        lastName.hashCode +
+        clubId.hashCode +
+        clubName.hashCode +
+        singleRankingFrom.hashCode +
+        singleRankingTo.hashCode +
+        doublePointsFrom.hashCode +
+        doublePointsTo.hashCode +
+        isFavorited.hashCode
+    );
+  }
+
+  @override
   bool operator ==(other) {
     return (id == other.id &&
         firstName == other.firstName &&

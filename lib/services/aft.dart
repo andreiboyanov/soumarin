@@ -226,7 +226,7 @@ Stream<Player> aftSearchPlayers(
     count: 10,
     name: "",
     id: "",
-    region: "1",
+    region: "1,3,4,6",
     male: true,
     female: true,
     clubId: ""}) async* {

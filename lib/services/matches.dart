@@ -1,11 +1,11 @@
 import "dart:async";
 
 import "../types/match.dart";
-import "../db.dart";
-import "aft.dart";
+//import "../db.dart";
+//import "aft.dart";
 
 class MatchesRegister {
-  final _db = SousMarinDb.instance;
+//  final _db = SousMarinDb.instance;
 
   Future<List<TennisMatch>> findMatches(
     String playerId,

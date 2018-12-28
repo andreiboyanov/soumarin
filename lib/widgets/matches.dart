@@ -59,7 +59,7 @@ class ExpansionPanelMatchList {
 //                      "${matches == null ? '-' : matches.length} "
 //                      "matches"),
                   new Text("Won $matchesWon$woWonMessage, "
-                      "Lost ${matchesLost}${woLostMessage}"),
+                      "Lost $matchesLost$woLostMessage"),
                 ],
               ),
             ),
