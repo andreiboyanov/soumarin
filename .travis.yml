@@ -19,3 +19,6 @@ script:
 cache:
   directories:
     - $HOME/.pub-cache
+android:
+  components:
+    - build-tools-28.0.3
