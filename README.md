@@ -1,6 +1,4 @@
-# sousmarin
-
-[![Build Status](https://travis-ci.org/andreiboyanov/sousmarin.svg?branch=master)](https://travis-ci.org/andreiboyanov/sousmarin)
+# sousmarin [![Build Status](https://travis-ci.org/andreiboyanov/sousmarin.svg?branch=master)](https://travis-ci.org/andreiboyanov/sousmarin)
 
 All the information available on the Web about tennis players, clubs, matches and tournaments in
 Belgium (starting with the francophone federation).
