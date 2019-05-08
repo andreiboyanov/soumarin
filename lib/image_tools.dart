@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:validator/validator.dart';
+import 'package:validators/validators.dart';
 import 'dart:convert' show Base64Decoder;
 
 ImageProvider getImageProvider(String url) {
