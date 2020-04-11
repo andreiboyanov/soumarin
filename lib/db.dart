@@ -20,41 +20,41 @@ class SousMarinDb {
   }
 
   Future put(name, value) async {
-    final key = await _db.put(value, name);
+    StoreRef store = StoreRef.main();
+    final key = await store.record(name).put(_db, value);
     return key;
   }
 
   Future get(name) async {
-    final result = await _db.get(name);
+    StoreRef store = StoreRef.main();
+    final result = await store.record(name).get(_db);
     return result;
   }
 
   Future savePlayer(Player player) async {
-    Store playerStore = _db.getStore("players");
+    StoreRef playerStore = intMapStoreFactory.store("players");
     final playerMap = player.toMap();
-    final record = new Record(playerStore, playerMap, player.id);
-    final Record result = await _db.putRecord(record);
-    return result;
+    await playerStore.record(player.id).put(_db, playerMap);
   }
 
   Stream getPlayers({start=0, limit=20}) async* {
-    Store playerStore = _db.getStore("players");
+    StoreRef playerStore = intMapStoreFactory.store("players");
     final finder = new Finder(limit: limit, offset: start);
-    final players = await playerStore.findRecords(finder);
+    final players = await playerStore.find(_db, finder: finder);
 
     for (final dbPlayer in players)
       yield dbPlayer;
   }
 
   Future getPlayer(id) async {
-    Store playerStore = _db.getStore("players");
-    final dbPlayer = await playerStore.get(id);
+    StoreRef playerStore = intMapStoreFactory.store("players");
+    final dbPlayer = await playerStore.record(id).get(_db);
     return dbPlayer;
   }
 
   Future deletePlayer(Player player) async {
-    Store playerStore = _db.getStore("players");
-    final result = playerStore.delete(player.id);
+    StoreRef playerStore = intMapStoreFactory.store("players");
+    final result = playerStore.record(player.id).delete(_db);
     return result;
   }
 
@@ -63,7 +63,7 @@ class SousMarinDb {
   _openDatabase() async {
     final dataDir = await getApplicationDocumentsDirectory();
     String dbPath = join(dataDir.path, "sousmarin.db");
-    DatabaseFactory dbFactory = ioDatabaseFactory;
+    DatabaseFactory dbFactory = databaseFactoryIo;
     _db = await dbFactory.openDatabase(dbPath);
   }
 }
